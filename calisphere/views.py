@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from calisphere.collection_data import CollectionManager
 from constants import *
-from cache_retry import SOLR_select, json_loads_url
+from cache_retry import SOLR_select, json_loads_url, request_to_solr_url
 
 import operator
 import math
@@ -85,7 +85,7 @@ def getCollectionData(collection_data=None, collection_id=None):
         collection['name'] = collection_details['name']
     return collection
 
-def getCollectionMosaic(collection_url):
+def getCollectionMosaic(collection_url, request):
     collection_details = json_loads_url(collection_url + "?format=json")
 
     collection_repositories = []
@@ -103,7 +103,8 @@ def getCollectionMosaic(collection_url):
         fields='reference_image_md5, url_item, id, title, collection_url',
         rows=6,
         start=0,
-        fq=['collection_url: \"' + collection_url + '\"']
+        fq=['collection_url: \"' + collection_url + '\"'],
+        solr_url=request_to_solr_url(request),
     )
 
     return {
@@ -158,7 +159,7 @@ def facetQuery(facet_fields, queryParams, solr_search):
                 facet='true',
                 facet_mincount=1,
                 facet_limit='-1',
-                facet_field=[facet_type]
+                facet_field=[facet_type],
             )
 
             facets[facet_type] = process_facets(
@@ -208,7 +209,7 @@ def processQueryRequest(request):
         'sort': sort,
         'view_format': view_format,
         'filters': filters,
-        'rc_page': rc_page
+        'rc_page': rc_page,
     }
 
 def home(request):
@@ -216,7 +217,10 @@ def home(request):
 
 def itemView(request, item_id=''):
     item_id_search_term = 'id:"{0}"'.format(_fixid(item_id))
-    item_solr_search = SOLR_select(q=item_id_search_term)
+    item_solr_search = SOLR_select(
+        q=item_id_search_term,
+        solr_url=request_to_solr_url(request),
+    )
     if not item_solr_search.numFound:
         raise Http404("{0} does not exist".format(item_id))
 
@@ -268,7 +272,8 @@ def search(request):
             facet='true',
             facet_mincount=1,
             facet_limit='-1',
-            facet_field=facet_fields
+            facet_field=facet_fields,
+            solr_url=request_to_solr_url(request),
         )
 
         # TODO: create a no results found page
@@ -335,7 +340,8 @@ def itemViewCarousel(request, queryParams={}):
         q=queryParams['query_terms'],
         rows=queryParams['rows'],
         start=queryParams['start'],
-        fq=solrize_filters(queryParams['filters'])
+        fq=solrize_filters(queryParams['filters']),
+        solr_url=request_to_solr_url(request),
     )
 
     # except solr.SolrException:
@@ -385,7 +391,8 @@ def relatedCollections(request, queryParams={}):
         facet='true',
         facet_mincount=1,
         facet_limit='-1',
-        facet_field=['collection_data']
+        facet_field=['collection_data'],
+        solr_url=request_to_solr_url(request),
     )
 
     # remove collections with a count of 0 and sort by count
@@ -401,7 +408,13 @@ def relatedCollections(request, queryParams={}):
     for i in range(queryParams['rc_page']*3, queryParams['rc_page']*3+3):
         if len(related_collections) > i:
             facet = ["collection_data: \"" + related_collections[i] + "\""]
-            collection_solr_search = SOLR_select(q=queryParams['query_terms'], rows='3', fq=facet, fields='collection_data, reference_image_md5, url_item, id, title')
+            collection_solr_search = SOLR_select(
+                q=queryParams['query_terms'],
+                rows='3',
+                fq=facet,
+                fields='collection_data, reference_image_md5, url_item, id, title',
+                solr_url=request_to_solr_url(request),
+            )
 
             if len(collection_solr_search.results) > 0:
                 if 'collection_data' in collection_solr_search.results[0] and len(collection_solr_search.results[0]['collection_data']) > 0:
@@ -447,7 +460,7 @@ def collectionsDirectory(request):
     page = int(request.GET['page']) if 'page' in request.GET else 1
 
     for collection_link in solr_collections.shuffled[(page*10)-10:page*10]:
-        collections.append(getCollectionMosaic(collection_link.url))
+        collections.append(getCollectionMosaic(collection_link.url, request))
 
     if 'page' in request.GET:
         return render(request, 'calisphere/collectionList.html', {'collections': collections, 'random': True, 'next_page': page+1})
@@ -473,7 +486,7 @@ def collectionsAZ(request, collection_letter):
 
     collections = []
     for collection_link in collections_list:
-        collections.append(getCollectionMosaic(collection_link.url))
+        collections.append(getCollectionMosaic(collection_link.url, request))
 
     return render(request, 'calisphere/collectionsAZ.html', {'collections': collections,
         'alphabet': list(string.ascii_uppercase),
@@ -506,7 +519,8 @@ def collectionView(request, collection_id):
         facet='true',
         facet_mincount=1,
         facet_limit='-1',
-        facet_field=facet_fields
+        facet_field=facet_fields,
+        solr_url=request_to_solr_url(request),
     )
 
     facets = facetQuery(facet_fields, queryParams, solr_search)
@@ -545,7 +559,16 @@ def collectionView(request, collection_id):
     })
 
 def campusDirectory(request):
-    repositories_solr_query = SOLR_select(q='*:*', rows=0, start=0, facet='true', facet_mincount=1, facet_field=['repository_data'], facet_limit='-1')
+    repositories_solr_query = SOLR_select(
+        q='*:*',
+        rows=0,
+        start=0,
+        facet='true',
+        facet_mincount=1,
+        facet_field=['repository_data'],
+        facet_limit='-1',
+        solr_url=request_to_solr_url(request),
+    )
     solr_repositories = repositories_solr_query.facet_counts['facet_fields']['repository_data']
 
     repositories = []
@@ -566,7 +589,16 @@ def campusDirectory(request):
         'campuses': CAMPUS_LIST})
 
 def statewideDirectory(request):
-    repositories_solr_query = SOLR_select(q='*:*', rows=0, start=0, facet='true', facet_mincount=1, facet_field=['repository_data'], facet_limit='-1')
+    repositories_solr_query = SOLR_select(
+        q='*:*',
+        rows=0,
+        start=0,
+        facet='true',
+        facet_mincount=1,
+        facet_field=['repository_data'],
+        facet_limit='-1',
+        solr_url=request_to_solr_url(request),
+    )
     solr_repositories = repositories_solr_query.facet_counts['facet_fields']['repository_data']
 
     repositories = []
@@ -620,7 +652,8 @@ def campusView(request, campus_slug, subnav=False):
             facet='true',
             facet_mincount=1,
             facet_limit='-1',
-            facet_field = ['collection_data', 'repository_data']
+            facet_field = ['collection_data', 'repository_data'],
+            solr_url=request_to_solr_url(request),
         )
 
         related_institutions = list(institution[0] for institution in process_facets(institutions_solr_search.facet_counts['facet_fields']['repository_data'], []))
@@ -652,7 +685,8 @@ def campusView(request, campus_slug, subnav=False):
             facet='true',
             facet_mincount=1,
             facet_limit='-1',
-            facet_field=facet_fields
+            facet_field=facet_fields,
+            solr_url=request_to_solr_url(request),
         )
 
         facets = facetQuery(facet_fields, queryParams, solr_search)
@@ -709,7 +743,8 @@ def campusView(request, campus_slug, subnav=False):
             facet='true',
             facet_mincount=1,
             facet_limit='-1',
-            facet_field = ['collection_data', 'repository_data']
+            facet_field = ['collection_data', 'repository_data'],
+            solr_url=request_to_solr_url(request),
         )
 
         related_collections = list(collection[0] for collection in process_facets(collections_solr_search.facet_counts['facet_fields']['collection_data'], []))
@@ -717,7 +752,7 @@ def campusView(request, campus_slug, subnav=False):
         for i, related_collection in enumerate(related_collections):
             collection_data = getCollectionData(collection_data=related_collection)
 
-            related_collections[i] = getCollectionMosaic(collection_data['url'])
+            related_collections[i] = getCollectionMosaic(collection_data['url'], request)
 
         return render(request, 'calisphere/campusCollectionsView.html', {
             'campus_slug': campus_slug,
@@ -755,7 +790,8 @@ def repositoryView(request, repository_id, subnav=False):
             facet='true',
             facet_mincount=1,
             facet_limit='-1',
-            facet_field=facet_fields
+            facet_field=facet_fields,
+            solr_url=request_to_solr_url(request),
         )
 
         facets = facetQuery(facet_fields, queryParams, solr_search)
@@ -811,7 +847,8 @@ def repositoryView(request, repository_id, subnav=False):
             facet='true',
             facet_mincount=1,
             facet_limit='-1',
-            facet_field = ['collection_data', 'repository_data']
+            facet_field = ['collection_data', 'repository_data'],
+            solr_url=request_to_solr_url(request),
         )
 
         related_collections = list(collection[0] for collection in process_facets(collections_solr_search.facet_counts['facet_fields']['collection_data'], []))
@@ -819,7 +856,7 @@ def repositoryView(request, repository_id, subnav=False):
         for i, related_collection in enumerate(related_collections):
             collection_data = getCollectionData(collection_data=related_collection)
 
-            related_collections[i] = getCollectionMosaic(collection_data['url'])
+            related_collections[i] = getCollectionMosaic(collection_data['url'], request)
 
         return render(request, 'calisphere/repositoryCollectionsView.html', {
             'repository_id': repository_id,

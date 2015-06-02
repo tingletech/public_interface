@@ -36,22 +36,16 @@ class SolrCache(object):
 # wrapper function for solr queries
 @retry(stop_max_delay=3000)  # milliseconds
 def SOLR_select(**kwargs):
-    # set up solr handler with auth token
-    SOLR = solr.SearchHandler(
-        solr.Solr(
-            settings.SOLR_URL,
-            post_headers={
-                'X-Authentication-Token': settings.SOLR_API_KEY,
-            },
-        ),
-        "/query"
-    )
+    # figure out what the solr_url is
     # look in the cache
     key = kwargs_md5(**kwargs)
     sc = cache.get(key)
     if not sc:
+        solr_url = kwargs.pop('solr_url')
+        SOLR = solr_handler(solr_url, settings.SOLR_API_KEY)
         # do the solr look up
-        sr = SOLR(**kwargs)
+        # q=None, fields=None, highlight=None, score=True, sort=None, sort_order="asc", **params
+        sr = SOLR(**kwargs) 
         # copy attributes that can be pickled to new object
         sc = SolrCache()
         sc.results = sr.results
@@ -60,3 +54,20 @@ def SOLR_select(**kwargs):
         sc.numFound = sr.numFound
         cache.set(key, sc, 60*15)  # seconds
     return sc
+
+
+def solr_handler(solr_url, solr_api_key):
+    # set up solr handler with auth token
+    return solr.SearchHandler(
+        solr.Solr(
+            solr_url,
+            post_headers={
+                'X-Authentication-Token': solr_api_key,
+            },
+        ),
+        "/query"
+    )
+
+
+def request_to_solr_url(request):
+    return request.GET.get('solr_url', settings.SOLR_URL)
