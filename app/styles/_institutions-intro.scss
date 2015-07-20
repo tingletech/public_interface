@@ -28,7 +28,7 @@
 
   @include bp(sm-screen) {
     margin: 0;
-    padding: 0 10px 0 0;
+    padding: $layout-component-margin ($layout-container-margin-sm * 1.5) $layout-component-margin 0;
   }
 
 }
@@ -37,7 +37,7 @@
   
 
   @include bp(sm-screen) {
-    padding: 0 0 0 10px;
+    padding: $layout-component-margin 0 $layout-component-margin ($layout-container-margin-sm * 1.5);
   }
 
 }
