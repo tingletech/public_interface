@@ -224,14 +224,16 @@ def home(request):
     return render (request, 'calisphere/home.html', {'q': ''})
 
 def getHostedContentFile(structmap):
+    contentFile = ''
     if structmap['format'] == 'image':
         contentFile = {
             'titleSources': json.dumps(json_loads_url('http://ucldciiifwest-env.elasticbeanstalk.com/' + structmap['id'] + '/info.json')), 
             'format': 'image'
         }
-    if structmap['format'] == 'text':
+    if structmap['format'] == 'file':
         contentFile = {
-            'format': 'text'
+            'id': structmap['id'],
+            'format': 'file'
         }
     return contentFile
 

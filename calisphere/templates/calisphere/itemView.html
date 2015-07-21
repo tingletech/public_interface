@@ -68,6 +68,7 @@
   {% elif item.type_ss.0|lower == 'moving image' %}
   {% elif item.type_ss.0|lower == 'sound' %}
   {% elif item.type_ss.0|lower == "text"%}
+    {% include 'calisphere/objectViewer/hosted-file.html' %}
   {% elif item.type_ss.0|lower == "complex object"%}
   {% endif %}
 {% endif %}
@@ -213,7 +214,11 @@ Permalink: {% url 'calisphere:itemView' item.id %}</textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Download</button>
+        {% if item.contentFile.format == 'file' %}
+          <a type="button" class="btn btn-primary" href="{{ ucldcMedia }}{{ item.contentFile.id }}" target="_blank">Download</a>
+        {% else %}
+          <a type="button" class="btn btn-primary" href="">Download</a>
+        {% endif %}
       </div>
     </div>
   </div>

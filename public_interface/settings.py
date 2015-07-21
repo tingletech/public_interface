@@ -30,6 +30,7 @@ STATIC_URL = os.getenv('UCLDC_STATIC_URL', 'http://localhost:9000/')  # `grunt s
 SOLR_URL = os.getenv('UCLDC_SOLR_URL', 'http://localhost:8983/solr')
 SOLR_API_KEY = os.getenv('UCLDC_SOLR_API_KEY', '')
 UCLDC_IMAGES = os.getenv('UCLDC_IMAGES', '')
+UCLDC_MEDIA = os.getenv('UCLDC_MEDIA', '')
 
 GA_SITE_CODE = os.getenv('UCLDC_GA_SITE_CODE', False)
 
