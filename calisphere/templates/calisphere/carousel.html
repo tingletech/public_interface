@@ -20,7 +20,7 @@
           {% if carousel_item.reference_image_md5 %}
             <img style="width: 100%; height: 100%"
             data-lazy="{{ thumbnailUrl }}crop/120x120/{{ carousel_item.reference_image_md5 }}"
-            sizes="100%"
+            
             {% if carousel_item.id == item.id %}class="carousel__image--selected"{% endif %}
             alt="{{ carousel_item.title.0|truncatewords:8 }}">
           {% else %}

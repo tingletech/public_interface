@@ -105,7 +105,7 @@
           <img
           class="{% if component.selected %}carousel-complex__item-img--selected{% else %}carousel-complex__item-img{% endif %}"
           data-lazy="http://ucldciiifwest-env.elasticbeanstalk.com/{{ component.id }}/full/,80/0/default.jpg"
-          sizes="100%"
+          
           alt="{{ component.label }}">
         {% else %}
           <img src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}" class="{% if component.selected %}carousel-complex__item-img--selected{% else %}carousel-complex__img--no-image{% endif %}">

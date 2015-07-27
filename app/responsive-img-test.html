@@ -35,7 +35,7 @@
 
       <h2>Responsive Image Test</h2>
 
-      <p>Note: On Chrome, after the biggest img listed in srcset is selected, it will cache it and won't pick the smaller images in srcset after resizing the browser (a feature, not a bug). Firefox and Safari will swap out each image on browser resize.</p>
+      <p><strong>Note:</strong> On Chrome, after the biggest img listed in srcset is selected, Chrome will cache it and won't pick the smaller images in srcset after resizing the browser (a feature, not a bug). Firefox and Safari will still swap out each image on browser resize, even after they are cached.</p>
 
         <div class="res__container">
             
@@ -49,7 +49,7 @@
 
         </div>
 
-        <!-- Note: the 'sizes' attribute is not needed if images are to scale to 100% of container. The number preceeding the 'w' should equal the breakpoints in the responsive design. -->
+        <p><strong>For the example below:</strong> The 'sizes' attribute is not needed if images are to scale to 100% of container. For the 'w' attribute, the number preceeding the 'w' should equal the breakpoints in the responsive design.</p>
 
         <div class="container-fluid">
             

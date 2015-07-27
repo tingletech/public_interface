@@ -38,7 +38,7 @@
               <img class="collect-row__image"
               src="{{ thumbnailUrl }}crop/210x210/{{ item.reference_image_md5 }}"
               srcset="{{ thumbnailUrl }}crop/210x210/{{ item.reference_image_md5 }} 60w, {{ thumbnailUrl }}crop/310x310/{{ item.reference_image_md5 }} 50w"
-              sizes="100%"
+              
               alt="{{ item.title.0|truncatewords:8 }}">
             {% else %}
               <img src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}" class="collect-row__image--no-image">
