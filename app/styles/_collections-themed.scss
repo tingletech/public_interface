@@ -1,7 +1,7 @@
 // ##### Collections - Themed Component ##### //
 
 .themed {
-
+  
 }
 
 .themed__subnav {
@@ -11,44 +11,53 @@
   border: 1px solid $design-primary-color;
 }
 
+.themed__button {
+  min-width: 25%;
+}
+
 .themed__triangle { // inspired by: http://output.jsbin.com/maqimaqozi/1/edit?html,css,output
   position: relative;
-  left: 85%;
+  left: 68%;
   width: 80px;
   height: $layout-component-margin;
+
+  &:before, &:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-top: 0;
+  }
+
+  &:before { // stroke
+    bottom: -1px;
+    left: 21px;
+    border-bottom-color: $design-primary-color;
+    border-width: 16px;
+  }
+
+  &:after { // fill
+    bottom: -1px;
+    left: 22px;
+    border-bottom-color: #fff;
+    border-width: 15px;
+  }
+
+  @include bp(sm-screen) {
+    left: 85%;
+  }
+
 }
 
-.themed__triangle:before, .themed__triangle:after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent;
-  border-top: 0;
-}
-
-/* stroke */
-.themed__triangle:before {
-  bottom: -1px;
-  left: 21px;
-  border-bottom-color: $design-primary-color;
-  border-width: 16px;
-}
-
-/* fill */
-.themed__triangle:after {
-  bottom: -1px;
-  left: 22px;
-  border-bottom-color: #fff;
-  border-width: 15px;
-}
+// ***** Orange Box with Link to Main CA History Page ***** //
 
 .themed__hosted-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: $layout-component-margin 0 $layout-component-margin 0;
+  margin: $layout-component-margin 0;
   padding: $layout-component-margin;
   color: #fff;
   background: $design-primary-color;
@@ -61,3 +70,52 @@
 .themed__hosted-text {
   font-size: 1.1em;
 }
+
+// ***** Themed Collection Row ***** //
+
+// .themed__collection-row [class^="col-"] {
+//   min-height: 200px;
+//   border: $bblue;
+// }
+
+.themed__collection-row {
+  position: relative;
+}
+
+.themed__collection-row ~ .themed__collection-row {
+  margin: $layout-component-margin 0 0 0;
+  padding: $layout-component-margin 0 0 0;
+  border-top: 1px solid $design-dark-gray-color;
+}
+
+.themed__collection-row-image {
+  width: 100%;
+  height: auto;
+}
+
+.themed__collection-row-text {
+  margin: 0 $layout-container-margin-md 50px $layout-container-margin-md;
+}
+
+.themed__collection-row-heading {
+  margin: 0 0 0.5em 0;
+}
+
+.themed__collection-row-button {
+  @extend .button__dark;
+  position: absolute; // to .themed__collection-row
+  bottom: 0;
+  left: 25%;
+  margin: 0 $layout-container-margin-md;
+  width: 20%;
+}
+
+.themed__collection-row-list {
+  padding: 0;
+}
+
+.themed__collection-row-list-item {
+  list-style: none;
+}
+
+
