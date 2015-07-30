@@ -1,7 +1,7 @@
 // ##### Collections - Themed Component ##### //
 
 .themed {
-  
+  margin: (-$layout-container-margin-sm) 0 0 0; 
 }
 
 .themed__subnav {
@@ -64,19 +64,17 @@
 }
 
 .themed__hosted-button {
+  @extend .icon__external-link;
   margin: 0 0 0 $layout-component-margin;
+  color: $design-primary-color;
+  border-color: $design-primary-color;
 }
 
 .themed__hosted-text {
-  font-size: 1.1em;
+  font-size: 1.3em;
 }
 
 // ***** Themed Collection Row ***** //
-
-// .themed__collection-row [class^="col-"] {
-//   min-height: 200px;
-//   border: $bblue;
-// }
 
 .themed__collection-row {
   position: relative;
@@ -99,6 +97,7 @@
 
 .themed__collection-row-heading {
   margin: 0 0 0.5em 0;
+  font-size: 1.4em;
 }
 
 .themed__collection-row-button {
@@ -111,6 +110,7 @@
 }
 
 .themed__collection-row-list {
+  margin: 2.2em 0 0 0;
   padding: 0;
 }
 
