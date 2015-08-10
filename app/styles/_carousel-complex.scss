@@ -11,7 +11,9 @@
 
 }
 
-.carousel-complex__item-fixed {
+// ***** Fixed Parent-level Thumbnail ***** //
+
+.carousel-complex__fixed-item {
   float: left;
   width: 80px;
   height: 80px;
@@ -21,6 +23,37 @@
   }
 
 }
+
+.carousel-complex__fixed-link {
+  display: block;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid $design-primary-color;
+
+  &:before { // fill box to 100% of container (maybe use to replace  transparent.png method some day!)
+    display: block;
+    padding-bottom: 100%;
+    content: "";
+  }
+
+}
+
+.carousel-complex__fixed-link--selected {
+  @extend .carousel-complex__fixed-link;
+  border: 5px solid $design-primary-color;
+}
+
+.carousel-complex__fixed-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+// ***** Complex Carousel Thumbnails ***** //
 
 .carousel-complex__item-container {
   margin: 0 0 0 90px;
@@ -44,6 +77,25 @@
 
 }
 
+.carousel-complex__link {
+  display: block;
+}
+
+.carousel-complex__item--no-image {
+  @extend .carousel-complex__item;
+  display: block;
+  position: relative;
+  min-width: 80px;
+  height: 80px;
+  border: 1px solid $design-dark-gray-color;
+}
+
+.carousel-complex__item--no-image--selected {
+  @extend .carousel-complex__item--no-image;
+  border: 5px solid $design-primary-color;
+  opacity: 1;
+}
+
 .carousel-complex__item--selected {
   @extend .carousel-complex__item;
   opacity: 1;
@@ -58,30 +110,6 @@
   height: 80px;
 }
 
-.carousel-complex__img--no-image {
-  @include thumbview__no-image($design-dark-gray-color); // (border-color)
-}
-
-.carousel-complex__img--no-image--selected {
-  @extend .carousel-complex__img--no-image;
-  border: 5px solid $design-dark-gray-color;
-}
-
-.carousel-complex__img-fixed--no-image {
-  @include thumbview__no-image($design-dark-gray-color); // (border-color)
-  border: 1px solid $design-dark-gray-color;
-}
-
-.carousel-complex__img-fixed--no-image--selected {
-  @extend .carousel-complex__img-fixed--no-image;
-  border: 5px solid $design-dark-gray-color;
-}
-
-.carousel-complex__item-img--selected {
+.carousel-complex__img--selected {
   border: 5px solid $design-primary-color;
-}
-
-.carousel-complex__link {
-  display: block;
-  position: relative;
 }

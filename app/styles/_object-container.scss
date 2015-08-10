@@ -83,6 +83,7 @@
 
 .object__container-osd {
   @extend .object__container-type1;
+  position: relative;
+  z-index: 1;
   background: $design-dark-gray-color;
-  cursor: move;
 }

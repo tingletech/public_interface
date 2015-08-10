@@ -24,25 +24,20 @@
   &:before, &:after {
     content: "";
     position: absolute;
+    left: 21px;
     width: 0;
     height: 0;
-    border-style: solid;
-    border-color: transparent;
-    border-top: 0;
+    border: 16px solid transparent;
   }
 
   &:before { // stroke
     bottom: -1px;
-    left: 21px;
     border-bottom-color: $design-primary-color;
-    border-width: 16px;
   }
 
   &:after { // fill
-    bottom: -1px;
-    left: 22px;
+    bottom: -2px;
     border-bottom-color: #fff;
-    border-width: 15px;
   }
 
   @include bp(sm-screen) {
@@ -89,6 +84,7 @@
 .themed__collection-row-image {
   width: 100%;
   height: auto;
+  border-radius: 10px;
 }
 
 .themed__collection-row-text {

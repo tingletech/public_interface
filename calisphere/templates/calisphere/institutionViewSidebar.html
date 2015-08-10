@@ -2,27 +2,27 @@
 
   <div class="button__institution-tabs-container">
     {% if repository_id %}
-    <a class="btn btn-default button__institution-tab-collections{% if mode == "collections" %} button__secondary{% endif %}" href="{% url 'calisphere:repositoryView' repository_id 'collections' %}">
+    <a class="button__institution-tab-collections{% if mode == "collections" %}--selected{% endif %}" href="{% url 'calisphere:repositoryView' repository_id 'collections' %}">
       Collections at this institution
     </a>
     {% elif campus_slug %}
-    <a class="btn btn-default button__institution-tab-collections{% if mode == "collections" %} button__secondary{% endif %}" href="{% url 'calisphere:campusView' campus_slug 'collections' %}">
+    <a class="button__institution-tab-collections{% if mode == "collections" %}--selected{% endif %}" href="{% url 'calisphere:campusView' campus_slug 'collections' %}">
       Collections at {{ institution.name }}
     </a>
     {% endif %}
   
     {% if campus_slug %}
-    <a class="btn btn-default button__institution-tab-contributors{% if mode == "institutions" %} button__secondary{% endif %}" href="{% url 'calisphere:campusView' campus_slug 'institutions' %}">
+    <a class="button__institution-tab-contributors{% if mode == "institutions" %}--selected{% endif %}" href="{% url 'calisphere:campusView' campus_slug 'institutions' %}">
       Contributors at {{ institution.name }}
     </a>
     {% endif %}
   
     {% if repository_id %}
-    <a class="btn btn-default button__institution-tab-search{% if mode == "items" %} button__secondary{% endif %}" href="{% url 'calisphere:repositoryView' repository_id 'items' %}">
+    <a class="button__institution-tab-search{% if mode == "items" %}--selected{% endif %}" href="{% url 'calisphere:repositoryView' repository_id 'items' %}">
       Search this institution
     </a>
     {% elif campus_slug %}
-    <a class="btn btn-default button__institution-tab-search{% if mode == "items" %} button__secondary{% endif %}" href="{% url 'calisphere:campusView' campus_slug 'items' %}">
+    <a class="button__institution-tab-search{% if mode == "items" %}--selected{% endif %}" href="{% url 'calisphere:campusView' campus_slug 'items' %}">
       Search {{ institution.name }}
     </a>
     {% endif %}

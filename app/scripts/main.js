@@ -119,6 +119,10 @@ $(document).ready(function(){
   	}
   });
 
+  $('.js-obj__osd-infobanner-link').click(function(){
+    $('.js-obj__osd-infobanner').slideUp('fast');
+  });
+
 }); // End of $(document).ready(function()
 
 // ##### Tooltip ##### //

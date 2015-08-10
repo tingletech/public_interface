@@ -5,6 +5,37 @@
 #obj__osd { // Open SeaDragon renders on this element
   width: 100%;
   height: 100%;
+  cursor: move;
+}
+
+.obj__osd-infobanner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: $layout-container-margin-sm;
+  font-size: 1.4em;
+  text-align: center;
+  color: #fff;
+  background-color: rgba($design-secondary-color, 0.5);
+}
+
+.obj__osd-infobanner-link {
+  font-size: 1.05em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: $design-primary-color;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+
+}
+
+html.no-jquery .obj__osd-infobanner {
+  display: none;
 }
 
 // ***** Harvest Image ***** //

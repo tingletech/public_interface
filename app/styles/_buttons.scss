@@ -74,20 +74,32 @@
   text-align: left;
 }
 
+// ***** Institution Nav Tabs ***** //
+
 .button__institution-tabs-container {
   margin: 1px 0 $layout-container-margin-md 0;
 }
 
 .button__institution-tabs {
   display: block;
+  position: relative;
   margin: -1px 0 0 0;
+  padding: 7px 15px 7px 40px;
   text-align: left;
-  border-radius: 0; // remove bootstrap's border-radius
+  border: 1px solid $design-dark-gray-color;
+  color: #000;
 
   &:before {
+    position: absolute;
+    left: 12px;
+    top: 6px;
     font-family: FontAwesome;
-    display: inline-block;
-    width: 1.8em;
+  }
+
+  &:hover {
+    text-decoration: none;
+    color: #000;
+    background-color: $design-light-gray-color;
   }
 
 }
@@ -96,7 +108,19 @@
   @extend .button__institution-tabs;
 
   &:before {
-    content: "\f00a";
+    content: $fa-var-th;
+  }
+
+  &--selected {
+    @extend .button__institution-tab-collections;
+    background-color: $design-secondary-color;
+    color: #fff;
+
+    &:hover {
+      color: #fff;
+      background-color: $design-secondary-color;
+    }
+
   }
 
 }
@@ -105,7 +129,19 @@
   @extend .button__institution-tabs;
 
   &:before {
-    content: "\f19c";
+    content: $fa-var-university;
+  }
+
+  &--selected {
+    @extend .button__institution-tab-contributors;
+    background-color: $design-secondary-color;
+    color: #fff;
+
+    &:hover {
+      color: #fff;
+      background-color: $design-secondary-color;
+    }
+
   }
 
 }
@@ -114,7 +150,19 @@
   @extend .button__institution-tabs;
 
   &:before {
-    content: "\f002";
+    content: $fa-var-search;
+  }
+
+  &--selected {
+    @extend .button__institution-tab-search;
+    background-color: $design-secondary-color;
+    color: #fff;
+
+    &:hover {
+      color: #fff;
+      background-color: $design-secondary-color;
+    }
+
   }
 
 }
