@@ -20,7 +20,7 @@
         <img class="obj-hosted__no-image" src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}">
       {% endif %}
     </div>
-    <div class="obj-hosted__caption">
+    <div class="obj-harvest__caption">
       {% if item.type_ss.0|lower == 'moving image' %}
         Play video
       {% elif item.type_ss.0|lower == 'sound' %}
