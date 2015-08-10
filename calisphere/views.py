@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -241,7 +241,12 @@ def itemView(request, item_id=''):
     item_id_search_term = 'id:"{0}"'.format(_fixid(item_id))
     item_solr_search = SOLR_select(q=item_id_search_term)
     if not item_solr_search.numFound:
-        raise Http404("{0} does not exist".format(item_id))
+        # second level search
+        old_id_search = SOLR_select(q='harvest_id_s:{}'.format(_fixid(item_id)))
+        if old_id_search.numFound:
+            return redirect('calisphere:itemView', old_id_search.results[0]['id'])
+        else:
+            raise Http404("{0} does not exist".format(item_id))
 
     for item in item_solr_search.results:
         if 'structmap_url' in item and len(item['structmap_url']) >= 1:
