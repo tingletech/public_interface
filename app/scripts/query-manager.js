@@ -66,7 +66,7 @@ var QueryManager = Backbone.Model.extend({
       (attrs = {})[key] = value;
     }
     
-    options || (options = {});
+    options = options || {};
         
     // if we're setting an attribute to default, remove it from the list
     _.each(attrs, (function(that) {
