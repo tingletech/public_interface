@@ -1,245 +1,441 @@
-{% extends "calisphere/base.html" %}
+{% load staticfiles %}
 
-{% block globalSearch %}      
-<div class="col-xs-12 col-sm-4 global-header__search--homepage js-global-header__search--homepage">
-	<form class="global-header__search-form--homepage" role="search" id="js-searchForm" action="{% url 'calisphere:search' %}" method="get">
-{% endblock %}
+<!doctype html>
+<html lang="en" class="no-js no-jquery">
+  <head>
+    <title>Calisphere</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="apple-touch-icon-precomposed" href="/favicon-152x152.png">
+    {% if devMode %}
+      <!-- <link rel="stylesheet" href="{% static "bower_components/slick.js/slick/slick.css" %}" /> -->
+      <link rel="stylesheet" href="{% static "bower_components/fontawesome/css/font-awesome.css" %}" />
+      <link rel="stylesheet" href="{% static "bower_components/mediaelement/build/mediaelementplayer.css" %}" />
+      <link rel="stylesheet" href="{% static "styles/main.css" %}" />
+    {% else %}
+      <link rel="stylesheet" href="{% static "styles/vendor.css" %}" />
+      <link rel="stylesheet" href="{% static "styles/main.css" %}" />
+    {% endif %}
 
-{% block content %}
+{% if gaSiteCode %}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-<div class="home">
+  ga('create', '{{ gaSiteCode }}', 'auto');
+  ga('send', 'pageview');
+</script>
+{% endif %}
+  </head>
+  <body>
 
-	<div class="home__main-section">
+    <div class="container-fluid">
+      <header class="global-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-4">
+            <div class="row">
+              <div class="col-xs-2 col-sm-12 global-header__bars-icon js-global-header__bars-icon">
+                <i class="fa fa-bars"></i>
+              </div>
+              <div class="col-xs-8 col-sm-12 global-header__logo">
+                <a class="global-header__logo-link" href="{% url 'calisphere:home' %}">
+                </a>
+              </div>
+              <div class="col-xs-2 col-sm-12 global-header__search-icon js-global-header__search-icon">
+                <i class="fa fa-search"></i>
+              </div>
+            </div>
+          </div>
 
-		<div class="home__mast">
-			<h1 class="home__mast-heading">The deeper you look, the more you'll discover.</h1>
-      <form role="search" id="js-homeForm" action="{% url 'calisphere:search' %}" method="get">
-			<div class="home__search">
-	      <label for="home__search-field" class="sr-only">Search the collections</label>
-	      <div class="input-group">
-	        <input id="home__search-field" form="js-homeForm" type="search" class="form-control input-lg" placeholder="Search the collections" name="q">
-	        <span class="input-group-btn">
-	          <button class="btn btn-default btn-lg home__search-button" type="submit">
-	          </button>
-	        </span>
-	      </div>
-	    </div>
-      </form>
-	    <a href="{% url 'calisphere:itemView' '26094--LAPL00035316' %}" class="home__img-credit--gradient">Strolling on the Colorado Street Bridge (Pasadena, CA) / Los Angeles Public Library</a>
+          <div class="col-xs-12 col-sm-4 global-header__search--homepage js-global-header__search--homepage">
+          	<form class="global-header__search-form--homepage" role="search" id="js-searchForm" action="{% url 'calisphere:search' %}" method="get">
+              <label for="global-search__field" class="global-search__label">Search the collections</label>
+              <div class="input-group">
+                <input id="global-search__field" form="js-searchForm" name="q" value="{{ q }}" type="search" class="form-control global-search__field js-globalSearch">
+                <span class="input-group-btn">
+                  <button class="btn btn-default global-search__button" type="submit"><span class="fa fa-search"></span>
+                  </button>
+                </span>
+              </div>
+            </form>
+          </div>
 
-		</div>
+          <div class="col-xs-12 col-sm-4 global-header__nav js-global-header__mobile-links">
+            <ul class="global-header__nav-list">
+              <li class="global-header__nav-list-item">
+                <a class="global-header__nav-link" href="{% url 'calisphere:collectionsDirectory' %}">Collections</a>
+              </li>
+              <li class="global-header__nav-list-item">
+                <a class="global-header__nav-link" href="{% url 'calisphere:campusDirectory' %}">Contributing Institutions</a>
+              </li>
+              <li class="global-header__nav-list-item">
+                <a class="global-header__nav-link" href="{% url 'calisphere:about' %}">About</a>
+              </li>
+              <li class="global-header__nav-list-item">
+                <a class="global-header__nav-link" href="{% url 'calisphere:contact' %}">Contact</a>
+              </li>
+              <li class="global-header__nav-list-item">
+                <a class="global-header__nav-link" href="{% url 'calisphere:help' %}">Help</a>
+              </li>
+            </ul>
+          </div>
 
-		<div class="row home__img-main-row">
+        </div>
 
-			<div class="col-xs-12 col-sm-8">
-				<p class="home__img-main1-text">Calisphere is a gateway to digital collections from California's great libraries, archives, and museums. Discover over 375,000 images, texts, and recordings&#8212;and counting.</p>
-			</div>
+        <div class="global-header__bar">
+          <ul class="global-header__bar-list">
+            <li class="global-header__bar-list-item">
+              <a class="global-header__bar-links" href="{% url 'calisphere:campusDirectory' %}">Contributing Institutions</a>
+            </li>
+            <li class="global-header__bar-list-item">
+              <a class="global-header__bar-links" href="{% url 'calisphere:collectionsDirectory' %}">Collections</a>
+            </li>
+          </ul>
+        </div>
 
-			<div class="col-xs-8">
-				<div class="home__img-main1">
-					<a href="{% url 'calisphere:itemView' '16289--http://ark.cdlib.org/ark:/13030/kt9v19q5hg' %}" class="home__img-credit">Crate label for Orange County Valencias / Orange Public Library</a>
-				</div>
-			</div>
+      </header>
+      <div id="js-pageContent">
+        <div class="home">
 
-			<div class="col-xs-4">
-				<div class="home__img-main2">
-					<a href="{% url 'calisphere:itemView' '872--http://ark.cdlib.org/ark:/13030/kt329015v6' %}" class="home__img-credit--gradient">Hirahara family portrait, 1926 / Anaheim Public Library</a>
-				</div>
-			</div>
+        	<div class="home__main-section">
 
-		</div>
+        		<div class="home__mast">
+        			<h1 class="home__mast-heading">The deeper you look, the more you'll discover.</h1>
+              <form role="search" id="js-homeForm" action="{% url 'calisphere:search' %}" method="get">
+        			<div class="home__search">
+        	      <label for="home__search-field" class="sr-only">Search the collections</label>
+        	      <div class="input-group">
+        	        <input id="home__search-field" form="js-homeForm" type="search" class="form-control input-lg" placeholder="Search the collections" name="q">
+        	        <span class="input-group-btn">
+        	          <button class="btn btn-default btn-lg home__search-button" type="submit">
+        	          </button>
+        	        </span>
+        	      </div>
+        	    </div>
+              </form>
+        	    <a href="{% url 'calisphere:itemView' '26094--LAPL00035316' %}" class="home__img-credit--gradient">Strolling on the Colorado Street Bridge (Pasadena, CA) / Los Angeles Public Library</a>
 
-	</div>
+        		</div>
 
-	<h2 class="home__heading2">Explore University of California collections:</h2>
+        		<div class="row home__img-main-row">
 
-	<div class="row home__thumbnail">
+        			<div class="col-xs-12 col-sm-8">
+        				<p class="home__img-main1-text">Calisphere is a gateway to digital collections from California's great libraries, archives, and museums. Discover over 375,000 images, texts, and recordings&#8212;and counting.</p>
+        			</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCSB' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_santabarbara.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Santa Barbara
-				</div>
-			</a>
-		</div>
+        			<div class="col-xs-8">
+        				<div class="home__img-main1">
+        					<a href="{% url 'calisphere:itemView' '16289--http://ark.cdlib.org/ark:/13030/kt9v19q5hg' %}" class="home__img-credit">Crate label for Orange County Valencias / Orange Public Library</a>
+        				</div>
+        			</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCI' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_irvine.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Irvine
-				</div>
-			</a>
-		</div>
+        			<div class="col-xs-4">
+        				<div class="home__img-main2">
+        					<a href="{% url 'calisphere:itemView' '872--http://ark.cdlib.org/ark:/13030/kt329015v6' %}" class="home__img-credit--gradient">Hirahara family portrait, 1926 / Anaheim Public Library</a>
+        				</div>
+        			</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCM' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_merced.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Merced
-				</div>
-			</a>
-		</div>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCSD' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_sandiego.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC San Diego
-				</div>
-			</a>
-		</div>
+        	</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCSC' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_santacruz.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Santa Cruz
-				</div>
-			</a>
-		</div>
+        	<h2 class="home__heading2">Explore University of California collections:</h2>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCLA' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_la.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UCLA
-				</div>
-			</a>
-		</div>
+        	<div class="row home__thumbnail">
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCD' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_davis.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Davis
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCSB' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_santabarbara.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Santa Barbara
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCSF' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_sf.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC San Francisco
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCI' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_irvine.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Irvine
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCB' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_berkeley.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Berkeley
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCM' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_merced.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Merced
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:campusView' 'UCR' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_riverside.jpg');">
-				<div class="home__thumbnail-caption--uc">
-					UC Riverside
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCSD' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_sandiego.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC San Diego
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-			<div class="home__contributing-block">
-				<a href="{% url 'calisphere:campusDirectory' %}" class="home__contributing-link">
-					<span class="home__contributing-content">View all contributing institutions</span>
-				</a>
-			</div>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCSC' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_santacruz.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Santa Cruz
+        				</div>
+        			</a>
+        		</div>
 
-	</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCLA' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_la.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UCLA
+        				</div>
+        			</a>
+        		</div>
 
-	<div class="row home__thumbnail">
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCD' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_davis.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Davis
+        				</div>
+        			</a>
+        		</div>
 
-		<h2 class="home__heading2">Featured statewide partners:</h2>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCSF' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_sf.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC San Francisco
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '87' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_marin.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Marin County Free Library
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCB' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_berkeley.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Berkeley
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '143' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_la-public-library.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Los Angeles Public Library
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:campusView' 'UCR' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-uc_riverside.jpg');">
+        				<div class="home__thumbnail-caption--uc">
+        					UC Riverside
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '144' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_sf-public-library.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					San Francisco Public Library
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        			<div class="home__contributing-block">
+        				<a href="{% url 'calisphere:campusDirectory' %}" class="home__contributing-link">
+        					<span class="home__contributing-content">View all contributing institutions</span>
+        				</a>
+        			</div>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '77' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_humboldt-state-university.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Humboldt State University
-				</div>
-			</a>
-		</div>
+        	</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '93' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_museum.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Museum of Performance and Design, Performing Arts Library
-				</div>
-			</a>
-		</div>
+        	<div class="row home__thumbnail">
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '80' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_japanese.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Japanese American National Museum
-				</div>
-			</a>
-		</div>
+        		<h2 class="home__heading2">Featured statewide partners:</h2>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '108' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_riverside.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Riverside Public Library
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '87' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_marin.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Marin County Free Library
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '146' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_huntington.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Huntington Library, Photo Archives
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '143' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_la-public-library.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Los Angeles Public Library
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '72' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_lgbt.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Gay, Lesbian, Bisexual, Transgender Historical Society
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '144' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_sf-public-library.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					San Francisco Public Library
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-			<a href="{% url 'calisphere:repositoryView' '149' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_tulare-county.jpg');">
-				<div class="home__thumbnail-caption--inst">
-					Tulare County Library
-				</div>
-			</a>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '77' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_humboldt-state-university.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Humboldt State University
+        				</div>
+        			</a>
+        		</div>
 
-		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-			<div class="home__contributing-block">
-				<a href="{% url 'calisphere:statewideDirectory' %}" class="home__contributing-link--inst">
-					<span class="home__contributing-content--inst">View all statewide partners</span>
-				</a>
-			</div>
-		</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '93' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_museum.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Museum of Performance and Design, Performing Arts Library
+        				</div>
+        			</a>
+        		</div>
 
-	</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '80' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_japanese.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Japanese American National Museum
+        				</div>
+        			</a>
+        		</div>
 
-</div>
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '108' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_riverside.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Riverside Public Library
+        				</div>
+        			</a>
+        		</div>
 
-{{ q }}
-{% endblock %}
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '146' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_huntington.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Huntington Library, Photo Archives
+        				</div>
+        			</a>
+        		</div>
+
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '72' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_lgbt.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Gay, Lesbian, Bisexual, Transgender Historical Society
+        				</div>
+        			</a>
+        		</div>
+
+        		<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+        			<a href="{% url 'calisphere:repositoryView' '149' 'collections' %}" class="home__thumbnail-link" style="background-image: url('{{ ucldcImages }}/thumb-inst_tulare-county.jpg');">
+        				<div class="home__thumbnail-caption--inst">
+        					Tulare County Library
+        				</div>
+        			</a>
+        		</div>
+
+        		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        			<div class="home__contributing-block">
+        				<a href="{% url 'calisphere:statewideDirectory' %}" class="home__contributing-link--inst">
+        					<span class="home__contributing-content--inst">View all statewide partners</span>
+        				</a>
+        			</div>
+        		</div>
+
+        	</div>
+
+        </div>
+      </div>
+
+      <div class="col-xs-12">
+
+        <footer class="global-footer">
+
+          <div class="global-footer__search">
+            <form class="global-footer__search-form" role="search" id="js-footerSearch" action="{% url 'calisphere:search' %}" method="get">
+              <label for="global-footer__search-field" class="global-footer__search-label">Search the collections</label>
+              <div class="input-group">
+                <input id="global-footer__search-field" form="js-footerSearch" name="q" value="{{ q }}" type="search" class="form-control global-footer__search-field js-globalSearch">
+                <span class="input-group-btn">
+                  <button class="btn btn-default global-footer__search-button" type="submit"><i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </form>
+          </div>
+
+          <div class="global-footer__nav">
+            <ul class="global-footer__nav-list--mobile">
+              <li class="global-footer__nav-list-item--mobile">
+                <a class="global-footer__nav-link--mobile" href="{% url 'calisphere:home' %}">Home</a>
+              </li>
+              <li class="global-footer__nav-list-item--mobile">
+                <a class="global-footer__nav-link--mobile" href="{% url 'calisphere:about' %}">About</a>
+              </li>
+              <li class="global-footer__nav-list-item--mobile">
+                <a class="global-footer__nav-link--mobile" href="{% url 'calisphere:contact' %}">Contact</a>
+              </li>
+              <li class="global-footer__nav-list-item--mobile">
+                <a class="global-footer__nav-link--mobile" href="{% url 'calisphere:help' %}">Help</a>
+              </li>
+              <li class="global-footer__nav-list-item--mobile">
+                <a class="global-footer__nav-link--mobile" href="{% url 'calisphere:campusDirectory' %}">Contributing Institutions</a>
+              </li>
+              <li class="global-footer__nav-list-item--mobile">
+                <a class="global-footer__nav-link--mobile" href="{% url 'calisphere:collectionsDirectory' %}">Collections</a>
+              </li>
+            </ul>
+            <ul class="global-footer__nav-list">
+              <li class="global-footer__nav-list-item">
+                <a class="global-footer__nav-link" href="{% url 'calisphere:termsOfUse' %}">Terms of Use</a>
+              </li>
+              <li class="global-footer__nav-list-item">
+                <a class="global-footer__nav-link" href="{% url 'calisphere:privacyStatement' %}">Privacy Statement</a>
+              </li>
+              <li class="global-footer__nav-list-item">
+                <a class="global-footer__nav-link" href="{% url 'calisphere:siteMap' %}">Site Map</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="global-footer__copyright">
+            <p>Calisphere is a service of the
+              <a href="http://libraries.universityofcalifornia.edu/">UC Libraries</a>, powered by the
+              <a href="http://www.cdlib.org/">California Digital Library</a>.</p>
+
+            <div class="col-xs-6 global-footer__social-icons-text">
+              <p>Connect with us:</p>
+            </div>
+            <div class="col-xs-6 global-footer__social-icons">
+              <a class="global-footer__twitter-icon"
+                 title="Twitter"
+                 href="https://twitter.com/calisphere"><span class="fa fa-twitter-square"></span></a>
+              <a class="global-footer__facebook-icon"
+                 title="Facebook"
+                 href="https://www.facebook.com/calisphere"><span class="fa fa-facebook-square"></span></a>
+            </div>
+
+          </div>
+
+        </footer>
+
+      </div>
+      
+      
+    </div>
+
+    {% if devMode %}
+      <script src="{% static "bower_components/jquery/dist/jquery.js" %}"></script>
+      <script src="{% static "bower_components/jquery-pjax/jquery.pjax.js" %}"></script>
+      <script src="{% static "bower_components/modernizr/modernizr.js" %}"></script>
+      <script src="{% static "bower_components/underscore/underscore-min.js" %}"></script>
+      <script src="{% static "bower_components/mediaelement/build/mediaelement-and-player.js" %}"></script>
+      <script src="{% static "bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js" %}"></script>
+      <script src="{% static "bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js" %}"></script>
+      <script src="{% static "bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js" %}"></script>
+      <script src="{% static "bower_components/slick.js/slick/slick.min.js" %}"></script>
+      <script src="{% static "bower_components/openseadragon/built-openseadragon/openseadragon/openseadragon.min.js" %}"></script>
+      <script src="{% static "bower_components/get-size/get-size.js" %}"></script>
+      <script src="{% static "bower_components/matches-selector/matches-selector.js" %}"></script>
+      <script src="{% static "bower_components/eventEmitter/EventEmitter.js" %}"></script>
+      <script src="{% static "bower_components/eventie/eventie.js" %}"></script>
+      <script src="{% static "bower_components/doc-ready/doc-ready.js" %}"></script>
+      <script src="{% static "bower_components/classie/classie.js" %}"></script>
+      <script src="{% static "bower_components/unipointer/unipointer.js" %}"></script>
+      <script src="{% static "bower_components/unidragger/unidragger.js" %}"></script>
+      <script src="{% static "bower_components/fizzy-ui-utils/utils.js" %}"></script>
+      <script src="{% static "bower_components/tap-listener/tap-listener.js" %}"></script>
+      <script src="{% static "bower_components/infinite-scroll/jquery.infinitescroll.js" %}"></script>
+      <script src="{% static "bower_components/imagesloaded/imagesloaded.pkgd.js" %}"></script>
+    {% else %}
+      <script src="{% static "scripts/vendor.js" %}"></script>
+      <script src="{% static "scripts/vendor/modernizr.js" %}"></script>
+    {% endif %}
+      <script src="{% static "scripts/calisphere-home.js" %}"></script>
+  </body>
+</html>

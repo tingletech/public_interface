@@ -7,15 +7,15 @@
 {% block title %}: {% if repository_id and uc_institution %}{{ uc_institution.0.name }} / {% endif %}{{ institution.name }}{% endblock %}
 
 {% block pageTitle %}
-  <h1 class="text__institutions-heading1">
+  <h1 class="text__institutions-heading1" id="js-institution" {%if campus_slug%}data-campus="{{ campus_slug }}"{% else %}data-institution="{{ repository_id }}"{% endif %}>
     {% if campus_slug or uc_institution %}
-      <a href="{% url 'calisphere:campusDirectory' %}">Institutions</a>
+      <a href="{% url 'calisphere:campusDirectory' %}" data-pjax="js-pageContent">Institutions</a>
     {% else %}
-      <a href="{% url 'calisphere:statewideDirectory' %}">Institutions</a>
+      <a href="{% url 'calisphere:statewideDirectory' %}" data-pjax="js-pageContent">Institutions</a>
     {% endif %}
      /
     {% if repository_id and uc_institution %}
-      <a href="{% url 'calisphere:campusView' uc_institution.0.slug 'collections' %}">{{ uc_institution.0.name }}</a> /
+      <a href="{% url 'calisphere:campusView' uc_institution.0.slug 'collections' %}" data-pjax="js-pageContent">{{ uc_institution.0.name }}</a> /
     {% endif %}
     <strong>
       {{ institution.name }}
@@ -54,7 +54,7 @@
               <li class="institution-intro__location-list">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
             {% endif %}
             {% if contact_information.url %}
-              <li class="institution-intro__location-list">Website: <a class="institutional-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
+              <li class="institution-intro__location-list">Website: <a class="institution-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
             {% endif %}
           </ul>
 
@@ -62,7 +62,7 @@
         </div>
 
         {% if contact_information.description %}
-        <!-- <p class="institutional-intro__description"> -->
+        <!-- <p class="institution-intro__description"> -->
           <!-- {{ contact_information.description }} -->
           <!-- <a class="institution-intro__web-link" href="">Read More</a> -->
         <!-- </p> -->
@@ -76,18 +76,18 @@
     {% elif repository_id and uc_institution %}
       <div class="col-md-3">
         <h2 class="institution-intro__heading">{{ institution.name }} <br> {{ uc_institution.0.name }}</h2>
-        <ul class="institutional-intro__list">
+        <ul class="institution-intro__list">
           {% if contact_information.city %}
-            <li class="institutional-intro__list-item">Location: {{ contact_information.city }}, CA</li>
+            <li class="institution-intro__list-item">Location: {{ contact_information.city }}, CA</li>
           {% endif %}
           {% if contact_information.phone %}
-            <li class="institutional-intro__list-item">Phone: {{ contact_information.phone }}</li>
+            <li class="institution-intro__list-item">Phone: {{ contact_information.phone }}</li>
           {% endif %}
           {% if contact_information.email %}
-            <li class="institutional-intro__list-item">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
+            <li class="institution-intro__list-item">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
           {% endif %}
           {% if contact_information.url %}
-            <li class="institutional-intro__list-item">Website: <a class="institutional-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
+            <li class="institution-intro__list-item">Website: <a class="institution-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
           {% endif %}
         </ul>
         <input id="{{ repository_id }}" class="facet js-facet facet-repository_data"
@@ -96,7 +96,7 @@
       </div>
       <div class="col-md-9">
         {% if contact_information.description %}
-          <p class="institutional-intro__description">
+          <p class="institution-intro__description">
             {{ contact_information.description }}
             <!-- <a class="institution-intro__web-link" href="">Read More</a> -->
           </p>
@@ -117,18 +117,18 @@
       </div>
       <div class="col-md-3">
         <h2 class="institution-intro__heading">{{ institution.name }}</h2>
-        <ul class="institutional-intro__list">
+        <ul class="institution-intro__list">
           {% if contact_information.city %}
-            <li class="institutional-intro__list-item">Location: {{ contact_information.city }}, CA</li>
+            <li class="institution-intro__list-item">Location: {{ contact_information.city }}, CA</li>
           {% endif %}
           {% if contact_information.phone %}
-            <li class="institutional-intro__list-item">Phone: {{ contact_information.phone }}</li>
+            <li class="institution-intro__list-item">Phone: {{ contact_information.phone }}</li>
           {% endif %}
           {% if contact_information.email %}
-            <li class="institutional-intro__list-item">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
+            <li class="institution-intro__list-item">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
           {% endif %}
           {% if contact_information.url %}
-            <li class="institutional-intro__list-item">Website: <a class="institutional-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
+            <li class="institution-intro__list-item">Website: <a class="institution-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
           {% endif %}
         </ul>
         <input id="{{ repository_id }}" class="facet js-facet facet-repository_data"
@@ -137,7 +137,7 @@
       </div>
       <div class="col-md-6">
         {% if contact_information.description %}
-          <p class="institutional-intro__description">
+          <p class="institution-intro__description">
             {{ contact_information.description }}
             <!-- <a class="institution-intro__web-link" href="">Read More</a> -->
           </p>
@@ -150,18 +150,18 @@
     {% else %}
       <div class="col-md-3">
         <h2 class="institution-intro__heading">{{ institution.name }}</h2>
-        <ul class="institutional-intro__list">
+        <ul class="institution-intro__list">
           {% if contact_information.city %}
-            <li class="institutional-intro__list-item">Location: {{ contact_information.city }}, CA</li>
+            <li class="institution-intro__list-item">Location: {{ contact_information.city }}, CA</li>
           {% endif %}
           {% if contact_information.phone %}
-            <li class="institutional-intro__list-item">Phone: {{ contact_information.phone }}</li>
+            <li class="institution-intro__list-item">Phone: {{ contact_information.phone }}</li>
           {% endif %}
           {% if contact_information.email %}
-            <li class="institutional-intro__list-item">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
+            <li class="institution-intro__list-item">Email: <a href="mailto:{{ contact_information.email }}">{{ contact_information.email }}</a></li>
           {% endif %}
           {% if contact_information.url %}
-            <li class="institutional-intro__list-item">Website: <a class="institutional-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
+            <li class="institution-intro__list-item">Website: <a class="institution-intro__web-link" href="{{ contact_information.url }}">{{ contact_information.url }}</a></li>
           {% endif %}
         </ul>
         <input id="{{ repository_id }}" class="facet js-facet facet-repository_data"
@@ -170,7 +170,7 @@
       </div>
       <div class="col-md-9">
         {% if contact_information.description %}
-          <p class="institutional-intro__description">
+          <p class="institution-intro__description">
             {{ contact_information.description }}
             <!-- <a class="institution-intro__web-link" href="">Read More</a> -->
           </p>

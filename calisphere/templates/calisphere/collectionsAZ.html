@@ -1,12 +1,10 @@
-{% extends "calisphere/base.html"|pjax:request %}
+{% extends "calisphere/collectionsDirectory.html,calisphere/pjaxTemplates/collectionsDirectory.html"|pjax:request %}
 {% load calisphere-extras %}
 {% load staticfiles %}
 
 {% block title %}: Collections A-Z{% endblock %}
 
-{% block content %}
-
-{% include "calisphere/collectionsHeader.html" %}
+{% block collectionContent %}
 
 <div class="row">
 
@@ -14,11 +12,16 @@
 
 		<div class="alphanav">
 		  <ul class="alphanav__list">
-		   	<li class="alphanav__list-item"><a class="{% if collection_letter == 'num' %}alphanav__list-link--selected{% else %}alphanav__list-link{% endif %}" href="{% url 'calisphere:collectionsAZ' 'num' %}">#</a></li>
+		   	<li class="alphanav__list-item"><a class="{% if collection_letter == 'num' %}alphanav__list-link--selected{% else %}alphanav__list-link{% endif %}" href="{% url 'calisphere:collectionsAZ' 'num' %}" data-pjax="js-pageContent">#</a></li>
 
 			{% for char, display in alphabet %}
         {% if display %}
-    		  <li class="alphanav__list-item"><a class="{% if char == collection_letter|upper %}alphanav__list-link--selected{% else %}alphanav__list-link{% endif %}" href="{% url 'calisphere:collectionsAZ' char|lower %}">{{ char }}</a></li>
+    		  <li class="alphanav__list-item">
+            <a class="{% if char == collection_letter|upper %}alphanav__list-link--selected{% else %}alphanav__list-link{% endif %}" 
+              href="{% url 'calisphere:collectionsAZ' char|lower %}" data-pjax="js-pageContent">
+                {{ char }}
+            </a>
+          </li>
         {% else %}
   		    <li class="alphanav__list-item"><span class="alphanav__list-link--inactive">{{ char }}</span></li>
         {% endif %}
@@ -67,23 +70,4 @@
 
 </div>
 
-{% endblock %}
-
-{% block footerScripts %}
-  <script>
-    $(document).ready(function() {
-      $('#js-mosaicContainer').infinitescroll({
-        navSelector: "#js-collectionPagination",
-        nextSelector: "#js-collectionPagination a.js-next",
-        itemSelector: "#js-mosaicContainer div.js-collectionMosaic",
-        debug: false,
-        loading: {
-          finishedMsg: "All collections showing.",
-          img: "{% static 'images/orange-spinner.gif' %}",
-          msgText: "",
-          selector: "#js-loading"
-        }
-      });
-    });
-  </script>
 {% endblock %}

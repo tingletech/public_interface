@@ -1,12 +1,10 @@
-{% extends "calisphere/base.html"|pjax:request %}
+{% extends "calisphere/collectionsDirectory.html,calisphere/pjaxTemplates/collectionsDirectory.html"|pjax:request %}
 {% load calisphere-extras %}
 {% load staticfiles %}
 
 {% block title %}: Collections Random Explore{% endblock %}
 
-{% block content %}
-
-  {% include "calisphere/collectionsHeader.html" %}
+{% block collectionContent %}
 
   <div id="js-mosaicContainer">
   {% for collection in collections %}
@@ -37,23 +35,4 @@
     </div>
   <!-- </div> -->
 
-{% endblock %}
-
-{% block footerScripts %}
-  <script>
-    $(document).ready(function() {
-      $('#js-mosaicContainer').infinitescroll({
-        navSelector: "#js-collectionPagination",
-        nextSelector: "#js-collectionPagination a.js-next",
-        itemSelector: "#js-mosaicContainer div.js-collectionMosaic",
-        debug: false,
-        loading: {
-          finishedMsg: "All collections showing.",
-          img: "{% static 'images/orange-spinner.gif' %}",
-          msgText: "",
-          selector: "#js-loading"
-        }
-      });
-    });
-  </script>
 {% endblock %}

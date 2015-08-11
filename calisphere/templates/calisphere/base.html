@@ -46,7 +46,7 @@
                 <i class="fa fa-bars"></i>
               </div>
               <div class="col-xs-8 col-sm-12 global-header__logo">
-                <a class="global-header__logo-link" href="{% url 'calisphere:home' %}">
+                <a class="global-header__logo-link" id="js-global-header-logo" href="{% url 'calisphere:home' %}">
                 </a>
               </div>
               <div class="col-xs-2 col-sm-12 global-header__search-icon js-global-header__search-icon">
@@ -55,10 +55,8 @@
             </div>
           </div>
 
-          {% block globalSearch %}
           <div class="col-xs-12 col-sm-4 global-header__search js-global-header__search">
             <form class="global-header__search-form" role="search" id="js-searchForm" action="{% url 'calisphere:search' %}" method="get">
-          {% endblock %}
               <label for="global-search__field" class="global-search__label">Search the collections</label>
               <div class="input-group">
                 <input id="global-search__field" form="js-searchForm" name="q" value="{{ q }}" type="search" class="form-control global-search__field js-globalSearch">
@@ -73,19 +71,19 @@
           <div class="col-xs-12 col-sm-4 global-header__nav js-global-header__mobile-links">
             <ul class="global-header__nav-list">
               <li class="global-header__nav-list-item">
-                <a class="global-header__nav-link" href="{% url 'calisphere:collectionsDirectory' %}">Collections</a>
+                <a class="global-header__nav-link" href="{% url 'calisphere:collectionsDirectory' %}" data-pjax="js-pageContent">Collections</a>
               </li>
               <li class="global-header__nav-list-item">
-                <a class="global-header__nav-link" href="{% url 'calisphere:campusDirectory' %}">Contributing Institutions</a>
+                <a class="global-header__nav-link" href="{% url 'calisphere:campusDirectory' %}" data-pjax="js-pageContent">Contributing Institutions</a>
               </li>
               <li class="global-header__nav-list-item">
-                <a class="global-header__nav-link" href="{% url 'calisphere:about' %}">About</a>
+                <a class="global-header__nav-link" href="{% url 'calisphere:about' %}" data-pjax="js-pageContent">About</a>
               </li>
               <li class="global-header__nav-list-item">
-                <a class="global-header__nav-link" href="{% url 'calisphere:contact' %}">Contact</a>
+                <a class="global-header__nav-link" href="{% url 'calisphere:contact' %}" data-pjax="js-pageContent">Contact</a>
               </li>
               <li class="global-header__nav-list-item">
-                <a class="global-header__nav-link" href="{% url 'calisphere:help' %}">Help</a>
+                <a class="global-header__nav-link" href="{% url 'calisphere:help' %}" data-pjax="js-pageContent">Help</a>
               </li>
               <!-- li class="global-header__nav-list-item">
                 <a class="global-header__nav-link" href="">Donate</a>
@@ -98,10 +96,10 @@
         <div class="global-header__bar">
           <ul class="global-header__bar-list">
             <li class="global-header__bar-list-item">
-              <a class="global-header__bar-links" href="{% url 'calisphere:campusDirectory' %}">Contributing Institutions</a>
+              <a class="global-header__bar-links" href="{% url 'calisphere:campusDirectory' %}" data-pjax="js-pageContent">Contributing Institutions</a>
             </li>
             <li class="global-header__bar-list-item">
-              <a class="global-header__bar-links" href="{% url 'calisphere:collectionsDirectory' %}">Collections</a>
+              <a class="global-header__bar-links" href="{% url 'calisphere:collectionsDirectory' %}" data-pjax="js-pageContent">Collections</a>
             </li>
           </ul>
         </div>
@@ -134,11 +132,14 @@
       <script src="{% static "bower_components/tap-listener/tap-listener.js" %}"></script>
       <script src="{% static "bower_components/infinite-scroll/jquery.infinitescroll.js" %}"></script>
       <script src="{% static "bower_components/imagesloaded/imagesloaded.pkgd.js" %}"></script>
+      <script src="{% static "bower_components/backbone/backbone.js" %}"></script>
     {% else %}
       <script src="{% static "scripts/vendor.js" %}"></script>
       <script src="{% static "scripts/vendor/modernizr.js" %}"></script>
     {% endif %}
-    <script src="{% static "scripts/search.js" %}"></script>
+    <script src="{% static "scripts/query-manager.js" %}"></script>
+    <script src="{% static "scripts/new-search.js" %}"></script>
+    <script src="{% static "scripts/calisphere.js" %}"></script>
 
     {% block footerScripts %}
     {% endblock %}

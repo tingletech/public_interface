@@ -186,7 +186,7 @@ def processQueryRequest(request):
     # concatenate query terms from refine query and query box, set defaults
     q = request.GET['q'] if 'q' in request.GET else ''
     rq = request.GET.getlist('rq')
-    query_terms = reduce(concat_query, request.GET.getlist('q') + request.GET.getlist('rq')) if 'q' in request.GET else ''
+    query_terms = reduce(concat_query, request.GET.getlist('q') + request.GET.getlist('rq')) if ('q' in request.GET or 'rq' in request.GET) else ''
     rows = request.GET['rows'] if 'rows' in request.GET else '16'
     start = request.GET['start'] if 'start' in request.GET and request.GET['start'] != '' else '0'
     sort = request.GET['sort'] if 'sort' in request.GET else 'relevance'
@@ -267,8 +267,13 @@ def itemView(request, item_id=''):
                     item['selectedComponent'] = component
                 else: 
                     item['selected'] = True
+                    # if parent content file, get it
                     if 'format' in structmap_data:
                         item['contentFile'] = getHostedContentFile(structmap_data)
+                    # otherwise get first component file
+                    else:
+                        component = structmap_data['structMap'][0]
+                        item['contentFile'] = getHostedContentFile(component)
                 item['structMap'] = structmap_data['structMap']
             else: 
                 # simple object
@@ -409,14 +414,17 @@ def search(request):
     return render (request, 'calisphere/home.html', {'q': ''})
 
 def itemViewCarousel(request, queryParams={}):
-    if not queryParams:
-        if request.method == 'GET' and len(request.GET.getlist('q')) > 0:
-            queryParams = processQueryRequest(request)
-
-        ajaxRequest = True
-        queryParams['rows'] = 6
-    else:
-        ajaxRequest = False
+    # if not queryParams:
+    #     if request.method == 'GET' and len(request.GET.getlist('q')) > 0:
+    #         queryParams = processQueryRequest(request)
+    #
+    #     ajaxRequest = True
+    #     queryParams['rows'] = 6
+    # else:
+    #     ajaxRequest = False
+    
+    queryParams = processQueryRequest(request)
+    item_id = request.GET['itemId'];
     
     fq = solrize_filters(queryParams['filters'])
     if 'campus_slug' in request.GET:
@@ -449,15 +457,16 @@ def itemViewCarousel(request, queryParams={}):
     if len(carousel_solr_search.results) == 0:
         print 'no results found'
     
-    if ajaxRequest:
-        return render(request, 'calisphere/carousel.html', {
-            'q': queryParams['q'],
-            'start': queryParams['start'],
-            'numFound': carousel_solr_search.numFound,
-            'search_results': carousel_solr_search.results,
-        })
+    # if ajaxRequest:
+    return render(request, 'calisphere/carousel.html', {
+        'q': queryParams['q'],
+        'start': queryParams['start'],
+        'numFound': carousel_solr_search.numFound,
+        'search_results': carousel_solr_search.results,
+        'item_id': item_id
+    })
 
-    return {'results': carousel_solr_search.results, 'numFound': carousel_solr_search.numFound}
+    # return {'results': carousel_solr_search.results, 'numFound': carousel_solr_search.numFound}
 
 def relatedCollections(request, queryParams={}):
     if not queryParams:

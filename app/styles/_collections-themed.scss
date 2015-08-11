@@ -50,22 +50,34 @@
 
 .themed__hosted-box {
   display: flex;
+  flex-flow: column nowrap;
   justify-content: space-between;
   align-items: center;
   margin: $layout-component-margin 0;
   padding: $layout-component-margin;
   color: #fff;
   background: $design-primary-color;
+
+  @include bp(sm-screen) {
+    flex-flow: row nowrap;
+  }
+  
 }
 
 .themed__hosted-button {
   @extend .icon__external-link;
-  margin: 0 0 0 $layout-component-margin;
+  margin: 1em 0 0 0;
   color: $design-primary-color;
   border-color: $design-primary-color;
+
+  @include bp(sm-screen) {
+    margin: 0 0 0 $layout-component-margin;
+  }
+
 }
 
 .themed__hosted-text {
+  display: block;
   font-size: 1.3em;
 }
 
@@ -88,7 +100,12 @@
 }
 
 .themed__collection-row-text {
-  margin: 0 $layout-container-margin-md 50px $layout-container-margin-md;
+  margin: $layout-container-margin-md 0 3.5em 0;
+
+  @include bp(sm-screen) {
+    margin: 0 $layout-container-margin-md 50px $layout-container-margin-md;
+  }
+
 }
 
 .themed__collection-row-heading {
@@ -100,18 +117,31 @@
   @extend .button__dark;
   position: absolute; // to .themed__collection-row
   bottom: 0;
-  left: 25%;
-  margin: 0 $layout-container-margin-md;
-  width: 20%;
+
+  @include bp(sm-screen) {
+    left: 25%;
+    margin: 0 $layout-container-margin-md;
+    width: 20%;
+  }
+
 }
 
 .themed__collection-row-list {
-  margin: 2.2em 0 0 0;
   padding: 0;
+  margin: -2.5em 0 3.5em 0; // the negative top-margin subtracts out the bottom-margin from .themed__collection-row-text
+
+  @include bp(sm-screen) {
+    margin: 2.2em 0 0 0;
+  }
+
 }
 
 .themed__collection-row-list-item {
   list-style: none;
+  margin: 0 0 1em 0;
+
+  @include bp(sm-screen) {
+    margin: 0;
+  }
+
 }
-
-

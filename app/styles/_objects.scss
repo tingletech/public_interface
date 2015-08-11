@@ -25,13 +25,7 @@
   font-size: 1.05em;
   font-weight: bold;
   text-decoration: underline;
-  color: $design-primary-color;
   cursor: pointer;
-
-  &:hover {
-    color: #fff;
-  }
-
 }
 
 html.no-jquery .obj__osd-infobanner {

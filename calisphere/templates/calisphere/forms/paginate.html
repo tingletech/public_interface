@@ -37,7 +37,7 @@
     </select>
   </div>
 
-  {% if start|subtract:rows > 0 %}
+  {% if start|subtract:rows >= 0 %}
 	  <button class="js-prev btn btn-link pag-dropdown__arrow-icon" data-start="{{ start|subtract:rows }}"><span class="fa fa-caret-left fa-lg"></span></button>
   {% else %}
   	<button class="js-prev btn btn-link pag-dropdown__arrow-icon" disabled><span class="fa fa-caret-left fa-lg"></span></button>

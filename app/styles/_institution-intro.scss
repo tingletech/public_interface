@@ -1,21 +1,21 @@
 // ##### Institution Intro Component ##### //
 
 .institution-intro {
-  
+  overflow: hidden;
+
   @include bp(sm-screen) {
     border: 1px solid $design-dark-gray-color;
-    overflow: hidden;
   }
 
 }
 
-.institution-intro__heading {
-  // no styles yet
-}
-
 .institution-intro__featured-image-link {
   display: block;
-  margin: $layout-component-margin ($layout-component-margin * 2);
+
+  @include bp(sm-screen) {
+    margin: $layout-component-margin ($layout-component-margin * 2);
+  }
+
 }
 
 .institution-intro__featured-image {
@@ -26,16 +26,22 @@
   text-align: right;
 }
 
-.institutional-intro__list {
-  margin: $layout-component-margin;
+.institution-intro__list {
   padding: 0;
+
+  @include bp(sm-screen) {
+    margin: $layout-component-margin;
+  }
+
 }
 
-// changed campus page contact information location to be below the logo instead of beside it
 .institution-intro__logo-location {
-//  display: flex;
-//  align-items: flex-end;
-  margin: $layout-component-margin 0 0 $layout-component-margin;
+  margin: $layout-component-margin 0;
+
+  @include bp(sm-screen) {
+    margin: $layout-component-margin 0 0 $layout-component-margin;
+  }
+
 }
 
 .institution-intro__logo {
@@ -45,19 +51,31 @@
 
 .institution-intro__logo--uc {
   @extend .institution-intro__logo;
+  padding: $layout-component-margin 0 0 0;
+
+  @include bp(sm-screen) {
+    padding: $layout-component-margin 0 0 $layout-component-margin;
+  }
+
+  @include bp(md-screen) {
   padding: $layout-component-margin 0 $layout-component-margin $layout-component-margin;
+  }
+
 }
 
-// changed campus page contact information location to be below the logo instead of beside it
 .institution-intro__location {
   margin: $layout-component-margin 0 0 0;
-//  margin: 0 0 0 $layout-component-margin;
   padding: 0;
 }
 
 .institution-intro__location--uc {
   @extend .institution-intro__location;
-  margin: $layout-component-margin 0 $layout-component-margin $layout-component-margin;
+  margin: $layout-component-margin 0;
+
+  @include bp(sm-screen) {
+    margin: $layout-component-margin 0 $layout-component-margin $layout-component-margin;
+  }
+
 }
 
 .institution-intro__location-list {
@@ -65,12 +83,16 @@
 }
 
 .institution-intro__heading {
-  margin: $layout-component-margin 0 0 $layout-component-margin;
   font-size: 1em;
   font-weight: bold;
+
+  @include bp(sm-screen) {
+    margin: $layout-component-margin 0 0 $layout-component-margin;
+  }
+
 }
 
-.institutional-intro__list-item {
+.institution-intro__list-item {
   list-style: none;
 }
 
@@ -78,6 +100,11 @@
   @extend .icon__external-link;
 }
 
-.institutional-intro__description {
-  margin: $layout-component-margin $layout-component-margin $layout-component-margin $layout-component-margin;
+.institution-intro__description {
+  margin: 0 0 $layout-component-margin 0;
+
+  @include bp(sm-screen) {
+    margin: $layout-component-margin;
+  }
+
 }

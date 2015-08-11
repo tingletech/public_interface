@@ -45,7 +45,7 @@
 
     <ul class="list-unstyled">
       {% for institution in institutions %}
-          <li><a href="{% url 'calisphere:repositoryView' institution.id 'collections' %}">{{ institution.name }}</a></li>
+          <li><a href="{% url 'calisphere:repositoryView' institution.id 'collections' %}" data-pjax="js-pageContent">{{ institution.name }}</a></li>
       {% endfor %}
     </ul>
 

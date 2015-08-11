@@ -10,7 +10,7 @@ urlpatterns = patterns('calisphere',
     url(r'^collections/(?P<collection_letter>[a-zA-Z]{1})/', 'views.collectionsAZ', name='collectionsAZ'),
     url(r'^collections/(?P<collection_letter>num)/', 'views.collectionsAZ', name='collectionsAZ'),
     url(r'^collections/(?P<collection_id>\d*)/', 'views.collectionView', name='collectionView'),
-    url(r'^collections/themedCollections', 'views.themedCollections', name='themedCollections'),
+    url(r'^collections/themedCollections/', 'views.themedCollections', name='themedCollections'),
     url(r'^collections/titleSearch/$', 'views.collectionsSearch', name='collectionsTitleSearch'),
     url(r'^collections/', 'views.collectionsSearch', name='collectionsSearch'),
 

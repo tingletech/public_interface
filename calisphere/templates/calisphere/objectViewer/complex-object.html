@@ -5,6 +5,10 @@
   
   <div id="obj__osd"></div>
 
+  <div class="obj__osd-infobanner js-obj__osd-infobanner">
+    Use the carousel below to page through items in this set. <span class="obj__osd-infobanner-link js-obj__osd-infobanner-link">Got it!</span>
+  </div>
+
   <div class="obj__osd-button-group">
 
     <a id="obj__osd-button-home" class="btn btn-default obj__osd-button" href="#">
@@ -69,29 +73,17 @@
 
 <div class="carousel-complex">
   <!--TODO: if {{ item.selected }} is True apply 'selected' styles -->
-  <div class="carousel-complex__item-fixed">
-    <a href="{% url 'calisphere:itemView' item.id %}" class="carousel-complex__link">
-      {% if item.type_ss.0|lower != "image" %}
-        {% if item.type_ss.0|lower == "moving image" %}
-          <span class="fa fa-play-circle-o fa-fw carousel-complex__icon-overlay"></span>
-        {% elif item.type_ss.0|lower == "sound"%}
-          <span class="fa fa-volume-up fa-fw carousel-complex__icon-overlay"></span>
-        {% elif item.type_ss.0|lower == "text"%}
-          <span class="fa fa-file-text-o fa-fw carousel-complex__icon-overlay"></span>
-        {% elif item.type_ss.0|lower == "dataset" %}
-          <span class="fa fa-bar-chart fa-fw carousel-complex__icon-overlay"></span>
-        {% endif %}
-        <!-- <span class="fa fa-cubes fa-fw carousel-complex__icon-overlay"></span> -->
-        <img class="carousel-complex__img-fixed--no-image{% if item.selected %} carousel-complex__item-img--selected{% endif %}" src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}">
-      {% else %}
-        <img class="carousel-complex__img-fixed{% if item.selected %} carousel-complex__item-img--selected{% endif %}" src="http://ucldciiifwest-env.elasticbeanstalk.com/{{ component.id }}/full/,80/0/default.jpg">
-      {% endif %}
+  <div class="carousel-complex__fixed-item">
+    <a href="{% url 'calisphere:itemView' item.id %}" class="carousel-complex__fixed-link--selected">
+      <div class="carousel-complex__fixed-content">
+      cover page
+      </div>
     </a>
   </div>
   
   <div class="carousel-complex__item-container">
   {% for component in item.structMap %}
-    <div class="{% if component.selected %}carousel-complex__item--selected{% else %}carousel-complex__item{% endif %}">
+    <div class="carousel-complex__item{% if component.format|lower != "image" %}--no-image{% endif %}{% if component.selected %}--selected{% endif %}">
       <a class="carousel-complex__link js-component-link" data-item_id="{{ forloop.counter0 }}" href="{% url 'calisphere:itemView' item.id %}">
         {% if component.format|lower != "image" %}
           {% if component.format|lower == "moving image" %}
@@ -103,12 +95,13 @@
           {% endif %}
         {% elif component.format|lower == "image" %}
           <img
-          class="{% if component.selected %}carousel-complex__item-img--selected{% else %}carousel-complex__item-img{% endif %}"
+          class="carousel-complex__img{% if component.selected %}--selected{% endif %}"
           data-lazy="http://ucldciiifwest-env.elasticbeanstalk.com/{{ component.id }}/full/,80/0/default.jpg"
-          
           alt="{{ component.label }}">
         {% else %}
-          <img src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}" class="{% if component.selected %}carousel-complex__item-img--selected{% else %}carousel-complex__img--no-image{% endif %}">
+          <span class="fa fa-file-text-o fa-fw carousel-complex__icon-overlay"></span>
+          <!-- <img src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}"
+          class="carousel-complex__item-img{% if component.selected %}--selected{% else %}carousel-complex__img--no-image{% endif %}"> -->
         {% endif %}
       </a>
     </div>

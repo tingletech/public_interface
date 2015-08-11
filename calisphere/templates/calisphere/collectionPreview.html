@@ -2,7 +2,7 @@
 <div class="row collect-row__link js-collectionMosaic">
 
 	<div class="col-xs-12 col-sm-4 collect-row__summary">
-    <a href="{% url 'calisphere:collectionView' collection.collection_id %}">
+    <a href="{% url 'calisphere:collectionView' collection.collection_id %}" data-pjax="js-pageContent">
       <h3 class="collect-row__title">{{ collection.name }}</h3>
     </a>
     {% if collection.description %}
@@ -18,7 +18,7 @@
   <p class="collect-row__item-number"><strong>{{ collection.numFound }} Item{{ collection.numFound|pluralize }}</strong></p>
 
   <div class="col-xs-12 col-sm-8">
-  	<a href="{% url 'calisphere:collectionView' collection.collection_id %}" class="collect-row__mosaic">
+  	<a href="{% url 'calisphere:collectionView' collection.collection_id %}" class="collect-row__mosaic" data-pjax="js-pageContent">
   		<div class="col-sm-6">
 	  		{% for item in collection.display_items %}
 

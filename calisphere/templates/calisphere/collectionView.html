@@ -6,7 +6,7 @@
 
 {% block title %}: {{ collection.name }}{% endblock %}
 
-{% block pageTitle %}<h2 class="text__page-heading"><a href="{% url 'calisphere:collectionsDirectory' %}">Collections</a> / <strong>{{ collection.name }}</strong></h2>{% endblock %}
+{% block pageTitle %}<h2 class="text__page-heading"><a href="{% url 'calisphere:collectionsDirectory' %}" data-pjax="js-pageContent">Collections</a> / <strong>{{ collection.name }}</strong></h2>{% endblock %}
 
 {% block additionalInfo %}
 
@@ -16,7 +16,7 @@
     <div class="collection-intro__institution">
       <h2 class="collection-intro__institution-heading">Owning Institution{{ collection.repository|pluralize }}:
         {% for repository in collection.repository %}
-          <a href="{% url 'calisphere:repositoryView' repository.resource_id 'collections' %}" class="collection-intro__institution-heading-link">
+          <a href="{% url 'calisphere:repositoryView' repository.resource_id 'collections' %}" class="collection-intro__institution-heading-link" data-pjax="js-pageContent">
             {% if repository.campus %}{{ repository.campus.0.name }}, {% endif %}{{ repository.name }}
           </a>
         {% endfor %}
@@ -56,7 +56,7 @@
 
   <div class="col-sm-6 col-md-12">
     {% for repository in collection.repository %}
-      <a class="btn btn-default button__back-to-institution" href="{% url 'calisphere:repositoryView' repository.resource_id 'collections' %}">
+      <a class="btn btn-default button__back-to-institution" href="{% url 'calisphere:repositoryView' repository.resource_id 'collections' %}" data-pjax="js-pageContent">
         <span class="fa fa-angle-left fa-lg fa-fw"></span>
         Go to Institution Page
       </a>

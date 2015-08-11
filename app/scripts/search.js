@@ -27,6 +27,8 @@ if(typeof console === "undefined") {
   console = { log: function() { } };
 }
 
+$(document).on("pjax:timeout", function() { return false; });
+
 
 var query;
 var DESKTOP;
@@ -156,7 +158,7 @@ FacetQuery.prototype.bindSubmitHandlers = function() {
         $('#js-facet')[0].reset();
         that.getFormValuesFromDOM();
         that.saveValuesToSession();
-        that.bindDomManipulators();
+        // that.bindDomManipulators();
       }
       if ($('#js-relatedCollections').length > 0) {
         that.relatedCollections();
@@ -174,6 +176,7 @@ FacetQuery.prototype.bindSubmitHandlers = function() {
       that.saveValuesToSession();
       that.clearDefaultFormValues();
       $.pjax.submit(event, that.resultsContainer);
+      event.preventDefault();
     }
   }(this));
 

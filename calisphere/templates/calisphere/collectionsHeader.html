@@ -15,16 +15,16 @@
 
   <div class="row">
     <div class="col-xs-6 col-sm-3 collect-intro__buttons">
-      <a class="btn btn-default btn-block {% if random %}button__secondary{% endif %}" href="{% url 'calisphere:collectionsDirectory' %}">Random Explore</a>
+      <a class="btn btn-default btn-block {% if random %}button__secondary{% endif %}" href="{% url 'calisphere:collectionsDirectory' %}" data-pjax="js-pageContent">Random Explore</a>
     </div>
     <div class="col-xs-6 col-sm-3 collect-intro__buttons">
-      <a class="btn btn-default btn-block {% if alphabet %}button__secondary{% endif %}" href="{% url 'calisphere:collectionsAZ' 'num' %}">A - Z</a>
+      <a class="btn btn-default btn-block {% if alphabet %}button__secondary{% endif %}" href="{% url 'calisphere:collectionsAZ' 'num' %}" data-pjax="js-pageContent">A - Z</a>
     </div>
     <div class="col-xs-6 col-sm-3 collect-intro__buttons">
-      <a class="btn btn-default btn-block {% if collection_q %}button__secondary{% endif %}" href="{% url 'calisphere:collectionsTitleSearch' %}">Title Search</a>
+      <a class="btn btn-default btn-block {% if collection_q %}button__secondary{% endif %}" href="{% url 'calisphere:collectionsTitleSearch' %}" data-pjax="js-pageContent">Title Search</a>
     </div>
     <div class="col-xs-6 col-sm-3 collect-intro__buttons">
-      <a class="btn btn-default btn-block {% if themedCollections %}button__secondary{% endif %}" href="{% url 'calisphere:themedCollections' %}">Themed Collections</a>
+      <a class="btn btn-default btn-block {% if themedCollections %}button__secondary{% endif %}" href="{% url 'calisphere:themedCollections' %}" data-pjax="js-pageContent">Themed Collections</a>
     </div>
   </div>
 

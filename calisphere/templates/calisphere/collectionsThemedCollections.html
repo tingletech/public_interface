@@ -1,12 +1,10 @@
-{% extends "calisphere/base.html"|pjax:request %}
+{% extends "calisphere/collectionsDirectory.html,calisphere/pjaxTemplates/collectionsDirectory.html"|pjax:request %}
 {% load calisphere-extras %}
 {% load staticfiles %}
 
 {% block title %}: Themed Collections{% endblock %}
 
-{% block content %}
-
-{% include "calisphere/collectionsHeader.html" %}
+{% block collectionContent %}
 
 <div class="titlesearch">
 
