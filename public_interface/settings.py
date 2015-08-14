@@ -72,6 +72,8 @@ ROOT_URLCONF = 'public_interface.urls'
 
 WSGI_APPLICATION = 'public_interface.wsgi.application'
 
+APPEND_SLASH = True
+
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
