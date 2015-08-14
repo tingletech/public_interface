@@ -1,7 +1,8 @@
 // ##### Thumbnail View Component ##### //
 
-.thumbnail [class^="col-"] {
+.icon [class^="col-"] {
 	// border: $bblue;
+	padding: 10px;
 }
 
 // This version eliminates need for .thumbnail__tile:before selector but it's not as well supported:
