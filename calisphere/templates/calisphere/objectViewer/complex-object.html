@@ -45,12 +45,16 @@
   
   <div class="object__container-complex-non-image">
     <div class="icon__overlay-container">
-      <!-- {% if item.contentFile %}
-        {% if item.contentFile.format|lower == 'text' %}
-          <span class="fa fa-file-text-o fa-fw obj-complex-non-image__file-icon-overlay"></span>
-          <img class="obj-hosted__no-image" src="{% static 'images/transparent.png' %}" alt="{{ item.title.0|truncatewords:8 }}">
+      {% if item.contentFile %}
+        {% if item.contentFile.format|lower == 'file' %}
+
+
+        {% include 'calisphere/objectViewer/hosted-file.html' %}
+        <div class="obj-hosted__caption" style="margin-left: -1px; margin-right: -1px;">
+          Use the carousel below to page through this {{ item.type.0 }} set
+        </div>
         {% endif %}
-      {% else %} -->
+      {% else %}
       {% if item.type_ss.0|lower == "moving image" %}
         <span class="fa fa-play-circle-o fa-fw obj-complex-non-image__file-icon-overlay"></span>
       {% elif item.type_ss.0|lower == "sound"%}
