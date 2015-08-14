@@ -5,7 +5,7 @@ from calisphere.home import HomeView
 urlpatterns = patterns('calisphere',
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^search/$', 'views.search', name='search'),
-    url(r'^item/(?P<item_id>.*)/', 'views.itemView', name='itemView'),
+    url(r'^item/(?P<item_id>.*)/$', 'views.itemView', name='itemView'),
 
     url(r'^collections/$', 'views.collectionsDirectory', name='collectionsDirectory'),
     url(r'^collections/(?P<collection_letter>[a-zA-Z]{1})/', 'views.collectionsAZ', name='collectionsAZ'),
