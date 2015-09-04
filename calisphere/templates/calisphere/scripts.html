@@ -1,4 +1,5 @@
 {% load staticfiles %}
+    <!-- script>paceOptions = { restartOnPushState: false}</script -->
     {% if devMode %}
       <script src="{% static "bower_components/jquery/dist/jquery.js" %}"></script>
       <script src="{% static "bower_components/jquery-pjax/jquery.pjax.js" %}"></script>
@@ -24,6 +25,7 @@
       <script src="{% static "bower_components/imagesloaded/imagesloaded.pkgd.js" %}"></script>
       <script src="{% static "bower_components/backbone/backbone.js" %}"></script>
       <script src="{% static "bower_components/typeahead.js/dist/typeahead.bundle.js" %}"></script>
+      <script src="{% static "bower_components/pace/pace.js" %}"></script>
     {% else %}
       <script src="{% static "scripts/vendor.js" %}"></script>
       <script src="{% static "scripts/vendor/modernizr.js" %}"></script>

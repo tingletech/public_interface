@@ -15,7 +15,8 @@
     "infinite-scroll": "~2.1.0",
     "imagesloaded": "~3.1.8",
     "backbone": "~1.2.1",
-    "typeahead.js": "~0.11.1"
+    "typeahead.js": "~0.11.1",
+    "pace": "~1.0.2"
   },
   "resolutions": {
     "slick.js": "~1.5.5",
