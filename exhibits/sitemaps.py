@@ -4,7 +4,7 @@ from django.contrib.sitemaps import Sitemap
 
 from .models import Exhibit, HistoricalEssay, LessonPlan, Theme
 
-class ExhibitionsSiteMap(Sitemap):
+class ExhibitionsSitemap(Sitemap):
     def items(self):
         return list(chain(
             Exhibit.objects.all(),

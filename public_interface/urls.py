@@ -16,7 +16,10 @@ from .sitemaps import *
 sitemaps = {
     # keys are sitemap P<section>s
     'static': StaticSitemap,
-    'exhibitions': ExhibitionsSiteMap,
+    'exhibitions': ExhibitionsSitemap,
+    'collections': CollectionSitemap,
+    'institutions': InstitutionSitemap,
+    'items': ItemSitemap,
 }
 
 admin.autodiscover()
