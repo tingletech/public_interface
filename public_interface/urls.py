@@ -4,9 +4,20 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps import views
 
 from calisphere.contact_form_view import CalisphereContactFormView
 from exhibits.views import calCultures
+
+from calisphere.sitemaps import *
+from exhibits.sitemaps import *
+from .sitemaps import *
+
+sitemaps = {
+    # keys are sitemap P<section>s
+    'static': StaticSitemap,
+    'exhibitions': ExhibitionsSiteMap,
+}
 
 admin.autodiscover()
 
@@ -24,6 +35,8 @@ urlpatterns = [
         TemplateView.as_view(
             template_name='contact_form/contact_form_sent.html'),
         name='contact_form_sent'),
+    url(r'^sitemap\.xml$', views.index, {'sitemaps': sitemaps}),
+    url(r'^sitemap-(?P<section>.+)\.xml$', views.sitemap, {'sitemaps': sitemaps}),
     url(r'^robots.txt$',
         lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")
     )

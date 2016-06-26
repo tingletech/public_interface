@@ -33,9 +33,8 @@ urlpatterns = [
     url(r'help/$', TemplateView.as_view(template_name='calisphere/help.html'), name='help'),
     url(r'terms/$', TemplateView.as_view(template_name='calisphere/termsOfUse.html'), name='termsOfUse'),
     url(r'privacy/$', TemplateView.as_view(template_name='calisphere/privacyStatement.html'), name='privacyStatement'),
-    url(r'siteMap/$', TemplateView.as_view(template_name='calisphere/siteMap.html'), name='siteMap'),
-    url(r'outreach/$', TemplateView.as_view(template_name='calisphere/outreach.html'), name='siteMap'),
-    url(r'contribute/$', TemplateView.as_view(template_name='calisphere/contribute.html'), name='siteMap'),
+    url(r'outreach/$', TemplateView.as_view(template_name='calisphere/outreach.html'), name='outreach'),
+    url(r'contribute/$', TemplateView.as_view(template_name='calisphere/contribute.html'), name='contribute'),
     url(r'jobs/$', TemplateView.as_view(template_name='calisphere/jobs.html'), name='jobs'),
 
     # AJAX HELPERS
