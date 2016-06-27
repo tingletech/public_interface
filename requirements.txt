@@ -14,3 +14,4 @@ django-redis==4.4.3
 redis==2.10.5
 hiredis==0.2.0
 psycopg2==2.6.1
+https://github.com/litchfield/django-fastsitemaps/archive/9afce59dcd792649431fa919130dc461be0ee875.zip#egg=django-fastsitemaps

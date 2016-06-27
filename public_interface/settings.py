@@ -90,9 +90,9 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',  # are we using sessions?
     'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -110,7 +110,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
-        # "APP_DIRS": True,
+        "APP_DIRS": True,
         "OPTIONS": {
             "builtins": [
                 "easy_pjax.templatetags.pjax_tags"
@@ -122,21 +122,9 @@ TEMPLATES = [
                 'public_interface.context_processors.settings',
             ],
             "debug": UCLDC_DEVEL,
-            'loaders': [
-                ('django.template.loaders.cached.Loader', [
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader', ]
-                ),
-            ],
         }
     }
 ]
-
-if UCLDC_DEVEL or DEBUG or 1 == 1:
-    # turn off template cache if we are debugging
-    TEMPLATES[0]['APP_DIRS'] = True
-    TEMPLATES[0]['OPTIONS'].pop('loaders', None)
-    TEMPLATES[0]['OPTIONS']['debug'] = True
 
 
 # Database
@@ -168,10 +156,6 @@ else:
 #
 
 DJANGO_CACHE_TIMEOUT = os.getenv('DJANGO_CACHE_TIMEOUT', 60*15) # seconds
-
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = DJANGO_CACHE_TIMEOUT
-CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 if UCLDC_REDIS_URL:
     # DJANGO_REDIS_IGNORE_EXCEPTIONS = True

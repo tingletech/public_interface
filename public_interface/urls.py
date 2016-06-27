@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.sitemaps import views
+from fastsitemaps import views
 
 from calisphere.contact_form_view import CalisphereContactFormView
 from exhibits.views import calCultures
