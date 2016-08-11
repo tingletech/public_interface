@@ -2,11 +2,14 @@ from django.apps import apps
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponse
 from calisphere.collection_data import CollectionManager
 from constants import *
 from cache_retry import SOLR_select, SOLR_raw, json_loads_url
+from static_sitemaps.util import _lazy_load
+from static_sitemaps import conf
 
+import os
 import operator
 import math
 import re
@@ -1254,3 +1257,12 @@ def repositoryView(request, repository_id, subnav=False):
 def contactOwner(request):
     # print request.GET
     return render(request, 'calisphere/thankyou.html');
+
+def sitemapSection(request, section):
+    storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+    path = os.path.join(conf.ROOT_DIR, 'sitemap-{}.xml'.format(section))
+
+    f = storage.open(path)
+    content = f.readlines()
+    f.close()
+    return HttpResponse(content, content_type='application/xml')

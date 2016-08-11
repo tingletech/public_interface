@@ -82,8 +82,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.humanize',
+    'django.contrib.sitemaps',
     'easy_pjax',
     'calisphere',
+    'static_sitemaps',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -109,7 +111,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
-        # "APP_DIRS": True,
+        "APP_DIRS": True,
         "OPTIONS": {
             "builtins": [
                 "easy_pjax.templatetags.pjax_tags"
@@ -259,3 +261,10 @@ CONTRUBUTOR_CONTACT_FLAG = 'link'  # 'email'
 
 SITE_ID = 1
 
+STATICSITEMAPS_ROOT_SITEMAP = 'public_interface.urls.sitemaps'
+
+STATICSITEMAPS_ROOT_DIR = os.path.join(BASE_DIR, "sitemaps") 
+
+STATICSITEMAPS_URL = '/sitemaps'
+
+STATICSITEMAPS_PING_GOOGLE = False

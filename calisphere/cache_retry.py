@@ -125,3 +125,23 @@ def SOLR_raw(**kwargs):
         sr = SOLR.raw(**kwargs)
         cache.set(key, sr, settings.DJANGO_CACHE_TIMEOUT)  # seconds
     return sr
+
+@retry(stop_max_delay=3000)
+def SOLR_select_nocache(**kwargs):
+    kwargs.update(SOLR_DEFAULTS)
+    # set up solr handler with auth token
+    SOLR = solr.SearchHandler(
+        solr.Solr(
+            settings.SOLR_URL,
+            post_headers={
+                'X-Authentication-Token': settings.SOLR_API_KEY,
+            },
+        ),
+        "/query"
+    )
+
+    # do the solr look up
+    sr = SOLR(**kwargs)
+
+    return sr 
+ 
