@@ -19,7 +19,13 @@
     "jQuery.dotdotdot": "~1.7.4",
     "isotope": "~3.0.1",
     "jquery": "2",
-    "outlayer": "~2.1.0"
+    "outlayer": "~2.1.0",
+    "doc-ready": "~1.0.4",
+    "classie": "~1.0.1",
+    "unipointer": "~2.1.0",
+    "get-size": "~2.0.2",
+    "tap-listener": "~2.0.0",
+    "unidragger": "~2.1.0"
   },
   "resolutions": {
     "slick.js": "~1.5.5",

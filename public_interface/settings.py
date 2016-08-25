@@ -145,7 +145,7 @@ if UCLDC_DEVEL or DEBUG or 1 == 1:
 
 DATABASES = { }
 
-if os.environ.get('RDS_DB_NAME'):
+if os.environ.get('RDS_DB_NAME') and not os.environ.get('UCLDC_EXHIBITIONS_DATA'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

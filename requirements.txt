@@ -13,4 +13,3 @@ https://github.com/ucldc/md5s3stash/archive/master.zip#egg=md5s3stash
 django-redis==4.4.3
 redis==2.10.5
 hiredis==0.2.0
-psycopg2==2.6.1

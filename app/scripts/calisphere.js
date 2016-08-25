@@ -73,6 +73,22 @@ var setupObjects = function() {
 };
 
 $(document).ready(function() {
+  if (typeof ga !== 'undefined') {
+    // google event tracking track outbound links
+    // based on https://support.google.com/analytics/answer/1136920?hl=en
+    // capture the click handler on outbound links
+    $('body').on('click', 'a[href^="http://"], a[href^="https://"]', function() {
+      var url = $(this).attr('href');
+      ga('send', 'event', 'outbound', 'click', url, {
+        'transport': 'beacon',  // use navigator.sendBeacon
+        // click captured and tracked, send the user along
+        'hitCallback': function () {
+          document.location = url;
+        }
+      });
+      return false;
+    });
+  }
   sessionStorageWarning();
 
   // http://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
@@ -211,6 +227,8 @@ $(document).ready(function() {
       NProgress.done();
     });
   }
+
+
 });
 
 $(document).on('pjax:end', function() {
@@ -229,6 +247,7 @@ $(document).on('pjax:end', function() {
 $(document).on('ready pjax:end', function() {
   // send google analytics on pjax pages
   /* globals ga: false */
+  /* jshint latedef: false */
   if (typeof ga !== 'undefined') {
     var inst_ga_code = $('[data-ga-code]').data('ga-code');
     var dim1 = $('[data-ga-dim1]').data('ga-dim1');

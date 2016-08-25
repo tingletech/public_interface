@@ -12,58 +12,27 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.c
 cd $DIR
 
 usage(){
-    ./beanstalk-describe.sh
-    echo "deploy-version.sh version-label environment-name"
+    echo "deploy-content.sh version-label"
     exit 1
 }
 
-if [ $# -ne 2 ];
+if [ $# -ne 1 ];
   then
     usage
 fi
 
 set -u
 
-DIR=ucldc-django-beanstalk
-BUCKET=xtf.dsc.cdlib.org
+DIR=exhibitions-data
+BUCKET=static-ucldc-cdlib-org
 REGION=us-west-2
-APPNAME=ucldc-django-west
+DUMP="exhibits-$1.json"
 
-# make sure environment actually exists
-env_exists=$(aws elasticbeanstalk describe-environments \
-  --environment-name "$2" \
-  --region $REGION \
-  | jq '.Environments | length')
+python manage.py dumpdata exhibits -o $DUMP
+gzip $DUMP
+aws s3 cp $DUMP.gz s3://$BUCKET/$DIR/$DUMP.gz
 
-if [[ env_exists -ne 1 ]]
-  then
-    echo "environment $2 does not exist"
-    usage
-fi
-
-ZIP="ucldc-$1.zip"
-
-grunt
-cd app
-git checkout .
-cd ..
-
-# package app and upload
-zip $ZIP -r calisphere/ load-content.sh manage.py public_interface/ test/ requirements.txt README.md .ebextensions/ dist/ exhibits/
-aws s3 cp $ZIP s3://$BUCKET/$DIR/$ZIP
-aws elasticbeanstalk create-application-version \
-  --application-name $APPNAME \
-  --region $REGION \
-  --source-bundle S3Bucket=$BUCKET,S3Key=$DIR/$ZIP \
-  --version-label "$1"
-
-# deploy app to a running environment
-aws elasticbeanstalk update-environment \
-  --environment-name "$2" \
-  --region $REGION \
-  --version-label "$1"
-
-# Copyright (c) 2015, Regents of the University of California
+# Copyright (c) 2016, Regents of the University of California
 #
 # All rights reserved.
 #
