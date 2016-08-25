@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'contribute/$', TemplateView.as_view(template_name='calisphere/contribute.html'), name='contribute'),
     url(r'jobs/$', TemplateView.as_view(template_name='calisphere/jobs.html'), name='jobs'),
     url(r'sitemap-(?P<section>.*).xml$', views.sitemapSection),
+    url(r'sitemap-(?P<section>.*).xml.gz$', views.sitemapSectionZipped),
 
     # AJAX HELPERS
     url(r'^relatedCollections/', views.relatedCollections, name='relatedCollections'),
