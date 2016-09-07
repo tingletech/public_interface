@@ -125,3 +125,17 @@ will show the running environments and the last few version names.  Then run
 ```
 deploy-version.sh version-label environment-name
 ```
+
+# Generate Static Sitemaps
+To generate or update sitemaps, run:
+
+```
+python manage.py calisphere_refresh_sitemaps
+```
+For more verbose output, use the `-v` option (1-3, with 3 being the most verbose).
+
+This will generate sitemap files and write them to the `sitemaps` directory in the root of the Django instance. 
+
+The sitemap.xml index file will be served statically by Django at the root URL, i.e. https://calisphere.org/sitemap.xml
+
+Right now, each `sitemap-items-*.xml` file contains 50,000 urls and is under 10MB uncompressed, which is the [google limit](https://support.google.com/webmasters/answer/183668?hl=en&ref_topic=4581190). Some are over 9MB in size though, so if we add more metadata in the future, we might need to reduce the number of urls per file.
