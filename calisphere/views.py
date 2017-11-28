@@ -11,7 +11,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import Http404, JsonResponse, HttpResponse
 from calisphere.collection_data import CollectionManager
-from .constants import CAMPUS_LIST, DEFAULT_FACET_FILTER_TYPES, FACET_FILTER_TYPES, SORT_OPTIONS, FEATURED_UNITS, getCollectionData, getRepositoryData, collectionFilterDisplay, repositoryFilterDisplay
+from .constants import CAMPUS_LIST, DEFAULT_FACET_FILTER_TYPES, FACET_FILTER_TYPES, SORT_OPTIONS, FEATURED_UNITS
 from .cache_retry import SOLR_select, SOLR_raw, json_loads_url
 from static_sitemaps.util import _lazy_load
 from static_sitemaps import conf
@@ -25,6 +25,107 @@ import copy
 import simplejson as json
 import string
 import urllib.parse
+
+def repositoryIdToUrl(id):
+    repository_template = "https://registry.cdlib.org/api/v1/repository/{0}/"
+    return repository_template.format(id)
+
+def collectionIdToUrl(id):
+    collection_template = "https://registry.cdlib.org/api/v1/collection/{0}/"
+    return collection_template.format(id)
+
+def getCollectionData(collection_data=None, collection_id=None):
+    collection = {}
+    if collection_data:
+        parts = collection_data.split('::')
+        collection['url'] = parts[0] if len(parts) >= 1 else ''
+        collection['name'] = parts[1] if len(parts) >= 2 else ''
+        collection_api_url = re.match(
+            r'^https://registry\.cdlib\.org/api/v1/collection/(?P<url>\d*)/?',
+            collection['url'])
+        if collection_api_url is None:
+            print('no collection api url:')
+            collection['id'] = ''
+        else:
+            collection['id'] = collection_api_url.group('url')
+    elif collection_id:
+        solr_collections = CollectionManager(settings.SOLR_URL,
+                                             settings.SOLR_API_KEY)
+        collection[
+            'url'] = "https://registry.cdlib.org/api/v1/collection/{0}/".format(
+                collection_id)
+        collection['id'] = collection_id
+        collection_details = json_loads_url(
+            "{0}?format=json".format(collection['url']))
+
+        collection['name'] = solr_collections.names.get(collection['url']
+            ) or collection_details.get('name', '[no collection name]')
+
+        collection['local_id'] = collection_details.get('local_id')
+        collection['slug'] = collection_details.get('slug')
+    return collection
+
+def getRepositoryData(repository_data=None, repository_id=None, repository_url=None):
+    """ supply either `repository_data` from solr or the `repository_id` or `repository_url`
+        all the reset will be looked up and filled in
+    """
+    app = apps.get_app_config('calisphere')
+    repository = {}
+    repository_details = {}
+    if not (repository_data) and not (repository_id) and repository_url:
+        repository_id = re.match(
+            r'https://registry\.cdlib\.org/api/v1/repository/(?P<repository_id>\d*)/?',
+            repository_url).group('repository_id')
+    if repository_data:
+        parts = repository_data.split('::')
+        repository['url'] = parts[0] if len(parts) >= 1 else ''
+        repository['name'] = parts[1] if len(parts) >= 2 else ''
+        repository['campus'] = parts[2] if len(parts) >= 3 else ''
+
+        repository_api_url = re.match(
+            r'^https://registry\.cdlib\.org/api/v1/repository/(?P<url>\d*)/',
+            repository['url'])
+        if repository_api_url is None:
+            print('no repository api url')
+            repository['id'] = ''
+        else:
+            repository['id'] = repository_api_url.group('url')
+            repository_details = app.registry.repository_data.get(
+                int(repository['id']), {})
+    elif repository_id:
+        repository[
+            'url'] = "https://registry.cdlib.org/api/v1/repository/{0}/".format(
+                repository_id)
+        repository['id'] = repository_id
+        repository_details = app.registry.repository_data.get(
+            int(repository_id), None)
+        repository['name'] = repository_details['name']
+        if repository_details['campus']:
+            repository['campus'] = repository_details['campus'][0]['name']
+        else:
+            repository['campus'] = ''
+    # details needed for stats
+    repository['ga_code'] = repository_details.get(
+        'google_analytics_tracking_code', None)
+    parent = repository_details['campus']
+    pslug = ''
+    if len(parent):
+        pslug = '{0}-'.format(parent[0].get('slug', None))
+    repository['slug'] = pslug + repository_details.get('slug', None)
+    return repository
+
+def collectionFilterDisplay(filter_item):
+    collection = getCollectionData(
+        collection_id=filter_item)
+    collection.pop('local_id', None)
+    collection.pop('slug', None)
+    return collection
+
+def repositoryFilterDisplay(filter_item):
+    repository = getRepositoryData(
+        repository_id=filter_item)
+    repository.pop('local_id', None)
+    return repository
 
 def process_sort_collection_data(string):
     '''temporary; should parse sort_collection_data
@@ -152,18 +253,36 @@ def facetQuery(facet_filter_types, params, solr_search, extra_filter=None):
                 solrParams['fq'].append(extra_filter)
             facet_search = SOLR_select(**solrParams)
 
+            # ['filter_transform'] refactor
+            # filter_transformed_list = (list(map(facet_filter_type['filter_transform'], params.getlist(facet_type))))
+            if (facet_type == 'repository_data'):
+                filter_transformed_list = (list(map(repositoryIdToUrl, params.getlist(facet_type))))
+            elif (facet_type == 'collection_data'):
+                filter_transformed_list = (list(map(collectionIdToUrl, params.getlist(facet_type))))
+            else:
+                filter_transformed_list = (params.getlist(facet_type))
+
             facets[facet_type] = process_facets(
                 facet_search.facet_counts['facet_fields'][facet_type],
-                list(map(facet_filter_type['filter_transform'], params.getlist(facet_type))), facet_type)
+                filter_transformed_list, facet_type)
         else:
             facets[facet_type] = process_facets(
                 solr_search.facet_counts['facet_fields'][facet_type],
-                list(map(facet_filter_type['filter_transform'], params.getlist(facet_type)))
+                filter_transformed_list
                 if facet_type in params else [], facet_type)
 
         # facets[facet_type] = list(map(lambda facet_item : (facet_filter_type['facet_transform'](facet_item[0]), facet_item[1]), facets[facet_type]))
         for j, facet_item in enumerate(facets[facet_type]):
-            facets[facet_type][j] = (facet_filter_type['facet_transform'](facet_item[0]), facet_item[1])
+            # ['facet_transform'] refactor
+            # facet_transformed_item = facet_filter_type['facet_transform'](facet_item[0])
+            if (facet_type == 'repository_data'):
+                facet_transformed_item = getRepositoryData(repository_data=facet_item[0])
+            elif (facet_type == 'collection_data'):
+                facet_transformed_item = getCollectionData(collection_data=facet_item[0])
+            else:
+                facet_transformed_item = facet_item[0]
+
+            facets[facet_type][j] = (facet_transformed_item, facet_item[1])
 
     return facets
 
@@ -204,7 +323,14 @@ def solrEncode(params, filter_types, facet_types = []):
     for filter_type in filter_types:
         selected_filters = params.getlist(filter_type['facet'])
         if (len(selected_filters) > 0):
-            filter_transform = filter_type['filter_transform']
+            # ['filter_transform'] refactor
+            # filter_transform = filter_type['filter_transform']
+            if(filter_type['facet'] == 'repository_data'):
+                filter_transform = lambda filterVal : repositoryIdToUrl(filterVal)
+            elif(filter_type['facet'] == 'collection_data'):
+                filter_transform = lambda filterVal : collectionIdToUrl(filterVal)
+            else:
+                filter_transform = lambda filterVal : filterVal
 
             selected_filters = list(map(
                 lambda filterVal :
@@ -454,10 +580,17 @@ def search(request):
         for filter_type in FACET_FILTER_TYPES:
             param_name = filter_type['facet']
             display_name = filter_type['filter']
-            filter_transform = filter_type['filter_display']
+            # filter_transform = filter_type['filter_display']
 
+            # 'filter_display' refactor
             if len(params.getlist(param_name)) > 0:
-                context['filters'][display_name] = list(map(filter_transform, params.getlist(param_name)))
+                if(param_name == 'repository_data'):
+                    context['filters'][display_name] = list(map(repositoryFilterDisplay, params.getlist(param_name)))
+                elif(param_name == 'collection_data'):
+                    context['filters'][display_name] = list(map(collectionFilterDisplay, params.getlist(param_name)))
+                else:
+                    context['filters'][display_name] = params.getlist(param_name)
+                # context['filters'][display_name] = list(map(filter_transform, params.getlist(param_name)))
 
         return render(request, 'calisphere/searchResults.html', context)
 
@@ -486,9 +619,9 @@ def itemViewCarousel(request):
                 'facet': custom_facet['facet_field'],
                 'display_name': custom_facet['label'],
                 'filter': custom_facet['facet_field'],
-                'filter_transform': lambda (a) : a,
-                'facet_transform': lambda (a) : a,
-                'filter_display': lambda (a) : a
+                # 'filter_transform': lambda (a) : a,
+                # 'facet_transform': lambda (a) : a,
+                # 'filter_display': lambda (a) : a
             })
     elif referral == 'campus':
         linkBackId = params.get('campus_slug', None)
@@ -540,10 +673,17 @@ def itemViewCarousel(request):
         for filter_type in facet_filter_types:
             param_name = filter_type['facet']
             display_name = filter_type['filter']
-            filter_transform = filter_type['filter_display']
+            # filter_transform = filter_type['filter_display']
 
+            # 'filter_display' refactor
             if len(params.getlist(param_name)) > 0:
-                context['filters'][display_name] = list(map(filter_transform, params.getlist(param_name)))
+                if(param_name == 'repository_data'):
+                    context['filters'][display_name] = list(map(repositoryFilterDisplay, params.getlist(param_name)))
+                elif (param_name == 'collection_data'):
+                    context['filters'][display_name] = list(map(collectionFilterDisplay, params.getlist(param_name)))
+                else:
+                    context['filters'][display_name] = params.getlist(param_name)
+                # context['filters'][display_name] = list(map(filter_transform, params.getlist(param_name)))
 
         context.update({
             'numFound': numFound,
@@ -586,9 +726,13 @@ def relatedCollections(request, slug=None, repository_id=None):
     related_collections = related_collections.facet_counts['facet_fields']['collection_data']
 
     # TODO: WHY IS THIS NECESSARY?
-    field = filter(lambda f: f['facet'] == 'collection_data', FACET_FILTER_TYPES)
+    # ['filter_transform'] refactor
+    # field = filter(lambda f: f['facet'] == 'collection_data', FACET_FILTER_TYPES)
+    # collection_urls = list(map(
+    #     field[0]['filter_transform'],
+    #     params.getlist('collection_data')))
     collection_urls = list(map(
-        field[0]['filter_transform'],
+        collectionIdToUrl,
         params.getlist('collection_data')))
     # remove collections with a count of 0 and sort by count
     related_collections = process_facets(
@@ -752,9 +896,9 @@ def collectionView(request, collection_id):
                 'facet': custom_facet['facet_field'],
                 'display_name': custom_facet['label'],
                 'filter': custom_facet['facet_field'],
-                'filter_transform': lambda (a) : a,
-                'facet_transform': lambda (a) : a,
-                'filter_display': lambda (a) : a
+                # 'filter_transform': lambda (a) : a,
+                # 'facet_transform': lambda (a) : a,
+                # 'filter_display': lambda (a) : a
             })
     extra_filter = 'collection_url: "' + collection_url + '"'
 
@@ -772,10 +916,17 @@ def collectionView(request, collection_id):
     for filter_type in facet_filter_types:
         param_name = filter_type['facet']
         display_name = filter_type['filter']
-        filter_transform = filter_type['filter_display']
+        # filter_transform = filter_type['filter_display']
 
+        # 'filter_display' refactor
         if len(params.getlist(param_name)) > 0:
-            context['filters'][display_name] = list(map(filter_transform, params.getlist(param_name)))
+            if(param_name == 'repository_data'):
+                context['filters'][display_name] = list(map(repositoryFilterDisplay, params.getlist(param_name)))
+            elif(param_name == 'collection_data'):
+                context['filters'][display_name] = list(map(collectionFilterDisplay, params.getlist(param_name)))
+            else:
+                context['filters'][display_name] = params.getlist(param_name)
+            # context['filters'][display_name] = list(map(filter_transform, params.getlist(param_name)))
 
     context.update({
         'FACET_FILTER_TYPES': facet_filter_types,
@@ -920,10 +1071,17 @@ def institutionView(request,
         for filter_type in facet_filter_types:
             param_name = filter_type['facet']
             display_name = filter_type['filter']
-            filter_transform = filter_type['filter_display']
+            # filter_transform = filter_type['filter_display']
 
+            # 'filter_display' refactor
             if len(params.getlist(param_name)) > 0:
-                filter_display[display_name] = list(map(filter_transform, params.getlist(param_name)))
+                if(param_name == 'repository_data'):
+                    filter_display[display_name] = list(map(repositoryFilterDisplay, params.getlist(param_name)))
+                elif(param_name == 'collection_data'):
+                    filter_display[display_name] = list(map(collectionFilterDisplay, params.getlist(param_name)))
+                else:
+                    filter_display[display_name] = params.getlist(param_name)
+                # filter_display[display_name] = list(map(filter_transform, params.getlist(param_name)))
 
         context = searchDefaults(params)
         context.update({
