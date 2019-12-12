@@ -231,9 +231,15 @@ def getHostedContentFile(structmap):
                                                 structmap['id'])
         if iiif_url.startswith('//'):
             iiif_url = ''.join(['http:', iiif_url])
-        iiif_info = json_loads_url(iiif_url)
+
+        try:
+            iiif_info = json_loads_url(iiif_url)
+        except:
+            return None
+
         if not iiif_info:
             return None
+
         size = iiif_info.get('sizes', [])[-1]
         if size['height'] > size['width']:
             access_size = {
